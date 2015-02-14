@@ -1,4 +1,7 @@
 Attribute VB_Name = "model"
+Public Sub show_form(frm As Form, frm_parent As Form, Optional modal As Integer = 1)
+    frm.Show modal, frm_parent
+End Sub
 
 Public Sub user_set_lv(lv As ListView)
     Dim ix As Integer

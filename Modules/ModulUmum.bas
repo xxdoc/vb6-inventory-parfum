@@ -30,6 +30,14 @@ Public usrID As String
 Public usrName As String
 Public usrLevel As String
 
+Sub main()
+    usrID = ""
+    usrName = ""
+    usrLevel = ""
+    'frmSplash.Show
+    FrmUtama.Show
+End Sub
+
 'sub untuk menghubungkan dengan database
 Sub Koneksi()
 On Error GoTo error_koneksi
@@ -232,9 +240,9 @@ isLogin = False
     pass = AntiSQLi(pass)
     
     sql = "select * from " & tbl & " WHERE " & _
-          "id_pengguna = '" & user & "' " & _
+          "user_nama = '" & user & "' " & _
           "AND " & _
-          "pass='" & pass & "'"
+          "user_password='" & pass & "'"
     
     Set Rs = Conn.Execute(sql)
     If Not Rs.EOF Then

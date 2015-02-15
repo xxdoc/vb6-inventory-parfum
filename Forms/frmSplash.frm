@@ -128,7 +128,7 @@ Private Sub Timer_Timer()
             Label3.Caption = "Aplikasi siap digunakan."
         End If
     Else
-        FrmUtama.Show
+        frmLogin.Show
         Unload Me
     End If
 End Sub

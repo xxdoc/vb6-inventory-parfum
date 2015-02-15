@@ -41,7 +41,7 @@ Begin VB.Form FrmUtama
          BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   5
             Alignment       =   1
-            TextSave        =   "3:52 AM"
+            TextSave        =   "1:36 PM"
             Object.ToolTipText     =   "Waktu Saat Ini"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
@@ -135,11 +135,12 @@ Private Sub formComponent()
                 stsWidth = stsWidth + Val(statusBar.Panels(intCount).Width)
             Next
         statusBar.Panels(6).MinWidth = Abs(Val(Me.Width) - stsWidth)
+        statusBar.Panels(1).Text = usrName
         
                 
 End Sub
 
-Private Sub Awal()
+Private Sub awal()
     'resize image background
         Form_Resize
 End Sub
@@ -148,7 +149,7 @@ Private Sub Form_Load()
     'form load
         statusBar.Move (Me.Height) - 380, 0, Me.Width, 375
     'kondisi normal / awal
-        Awal
+        awal
 End Sub
 
 Private Sub Form_Resize()
@@ -169,6 +170,10 @@ End Sub
 
 Private Sub mn_botol_Click()
     Call show_form(FrmBotol, Me)
+End Sub
+
+Private Sub mn_inventory_kecelakaan_Click()
+    Call show_form(FrmKecelakaan, Me)
 End Sub
 
 Private Sub mn_kategori_Click()

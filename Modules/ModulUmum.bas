@@ -31,11 +31,11 @@ Public usrName As String
 Public usrLevel As String
 
 Sub main()
-    usrID = ""
-    usrName = ""
-    usrLevel = ""
+    usrID = "1"
+    usrName = "admin"
+    usrLevel = "1"
     'frmSplash.Show
-    FrmUtama.Show
+    FrmKecelakaan.Show
 End Sub
 
 'sub untuk menghubungkan dengan database

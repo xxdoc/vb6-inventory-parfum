@@ -4,15 +4,15 @@ Begin VB.Form FrmKecelakaan
    BackColor       =   &H00C0C000&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Kecelakaan"
-   ClientHeight    =   7575
+   ClientHeight    =   9240
    ClientLeft      =   45
    ClientTop       =   390
-   ClientWidth     =   6870
+   ClientWidth     =   6915
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   7575
-   ScaleWidth      =   6870
+   ScaleHeight     =   9240
+   ScaleWidth      =   6915
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdAdd 
       Caption         =   "&Tambah"
@@ -28,7 +28,7 @@ Begin VB.Form FrmKecelakaan
       Height          =   495
       Left            =   1440
       TabIndex        =   1
-      Top             =   2880
+      Top             =   4560
       Width           =   975
    End
    Begin VB.CommandButton cmdSave 
@@ -44,8 +44,8 @@ Begin VB.Form FrmKecelakaan
       EndProperty
       Height          =   495
       Left            =   2520
-      TabIndex        =   5
-      Top             =   2880
+      TabIndex        =   4
+      Top             =   4560
       Width           =   975
    End
    Begin VB.CommandButton cmdEdit 
@@ -61,8 +61,8 @@ Begin VB.Form FrmKecelakaan
       EndProperty
       Height          =   495
       Left            =   3600
-      TabIndex        =   6
-      Top             =   2880
+      TabIndex        =   5
+      Top             =   4560
       Width           =   975
    End
    Begin VB.CommandButton cmdDel 
@@ -78,8 +78,8 @@ Begin VB.Form FrmKecelakaan
       EndProperty
       Height          =   495
       Left            =   4680
-      TabIndex        =   7
-      Top             =   2880
+      TabIndex        =   6
+      Top             =   4560
       Width           =   975
    End
    Begin VB.CommandButton cmdCancel 
@@ -95,8 +95,8 @@ Begin VB.Form FrmKecelakaan
       EndProperty
       Height          =   495
       Left            =   5760
-      TabIndex        =   8
-      Top             =   2880
+      TabIndex        =   7
+      Top             =   4560
       Width           =   975
    End
    Begin VB.Frame Frame1 
@@ -104,8 +104,8 @@ Begin VB.Form FrmKecelakaan
       BorderStyle     =   0  'None
       Height          =   3975
       Left            =   120
-      TabIndex        =   14
-      Top             =   3480
+      TabIndex        =   13
+      Top             =   5160
       Width           =   6615
       Begin VB.Frame frPagingAction 
          Appearance      =   0  'Flat
@@ -115,7 +115,7 @@ Begin VB.Form FrmKecelakaan
          ForeColor       =   &H80000008&
          Height          =   375
          Left            =   2760
-         TabIndex        =   22
+         TabIndex        =   21
          Top             =   3480
          Width           =   2415
          Begin VB.CommandButton cmdPagingPrev 
@@ -131,7 +131,7 @@ Begin VB.Form FrmKecelakaan
             EndProperty
             Height          =   350
             Left            =   0
-            TabIndex        =   25
+            TabIndex        =   24
             ToolTipText     =   "Go To Previous Page"
             Top             =   0
             Width           =   735
@@ -150,7 +150,7 @@ Begin VB.Form FrmKecelakaan
             EndProperty
             Height          =   360
             Left            =   840
-            TabIndex        =   24
+            TabIndex        =   23
             Text            =   "1"
             ToolTipText     =   "Type To Specific Page"
             Top             =   0
@@ -169,7 +169,7 @@ Begin VB.Form FrmKecelakaan
             EndProperty
             Height          =   350
             Left            =   1680
-            TabIndex        =   23
+            TabIndex        =   22
             ToolTipText     =   "Go To Next Page"
             Top             =   0
             Width           =   735
@@ -188,7 +188,7 @@ Begin VB.Form FrmKecelakaan
          EndProperty
          Height          =   350
          Left            =   2160
-         TabIndex        =   19
+         TabIndex        =   18
          ToolTipText     =   "Reload Data"
          Top             =   3480
          Width           =   495
@@ -208,14 +208,14 @@ Begin VB.Form FrmKecelakaan
          Left            =   1080
          List            =   "FrmKecelakaan.frx":0013
          Style           =   2  'Dropdown List
-         TabIndex        =   18
+         TabIndex        =   17
          Top             =   3480
          Width           =   975
       End
       Begin MSComctlLib.ListView LvData 
          Height          =   2535
          Left            =   120
-         TabIndex        =   16
+         TabIndex        =   15
          Top             =   840
          Width           =   6375
          _ExtentX        =   11245
@@ -233,7 +233,7 @@ Begin VB.Form FrmKecelakaan
          BackColor       =   -2147483643
          BorderStyle     =   1
          Appearance      =   0
-         NumItems        =   6
+         NumItems        =   9
          BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
             Object.Width           =   0
          EndProperty
@@ -250,20 +250,38 @@ Begin VB.Form FrmKecelakaan
             Object.Width           =   0
          EndProperty
          BeginProperty ColumnHeader(4) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+            Alignment       =   2
             SubItemIndex    =   3
-            Text            =   "Username"
-            Object.Width           =   6174
+            Text            =   "Tanggal"
+            Object.Width           =   3528
          EndProperty
          BeginProperty ColumnHeader(5) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+            Alignment       =   2
             SubItemIndex    =   4
-            Text            =   "password"
-            Object.Width           =   0
+            Text            =   "Tipe"
+            Object.Width           =   1764
          EndProperty
          BeginProperty ColumnHeader(6) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-            Alignment       =   2
             SubItemIndex    =   5
-            Text            =   "Level"
+            Text            =   "Nama"
             Object.Width           =   3528
+         EndProperty
+         BeginProperty ColumnHeader(7) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+            Alignment       =   2
+            SubItemIndex    =   6
+            Text            =   "qty"
+            Object.Width           =   1411
+         EndProperty
+         BeginProperty ColumnHeader(8) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+            SubItemIndex    =   7
+            Text            =   "keterangan"
+            Object.Width           =   4410
+         EndProperty
+         BeginProperty ColumnHeader(9) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+            Alignment       =   2
+            SubItemIndex    =   8
+            Text            =   "Oleh"
+            Object.Width           =   2646
          EndProperty
       End
       Begin VB.TextBox txtCari 
@@ -299,7 +317,7 @@ Begin VB.Form FrmKecelakaan
          EndProperty
          Height          =   270
          Left            =   5880
-         TabIndex        =   21
+         TabIndex        =   20
          Top             =   3495
          Width           =   600
       End
@@ -318,7 +336,7 @@ Begin VB.Form FrmKecelakaan
          EndProperty
          Height          =   270
          Left            =   120
-         TabIndex        =   17
+         TabIndex        =   16
          Top             =   3480
          Width           =   825
       End
@@ -337,7 +355,7 @@ Begin VB.Form FrmKecelakaan
          EndProperty
          Height          =   315
          Left            =   120
-         TabIndex        =   15
+         TabIndex        =   14
          Top             =   240
          Width           =   1215
       End
@@ -357,7 +375,7 @@ Begin VB.Form FrmKecelakaan
          EndProperty
          Height          =   270
          Left            =   5310
-         TabIndex        =   20
+         TabIndex        =   19
          Top             =   3495
          Width           =   555
       End
@@ -365,14 +383,64 @@ Begin VB.Form FrmKecelakaan
    Begin VB.Frame fraForm 
       BackColor       =   &H00FFFFFF&
       BorderStyle     =   0  'None
-      Height          =   1815
+      Height          =   3375
       Left            =   120
-      TabIndex        =   12
+      TabIndex        =   11
       Top             =   960
       Width           =   6615
-      Begin VB.ComboBox cboLevel 
+      Begin MSComctlLib.ListView LvDetail 
+         Height          =   855
+         Left            =   120
+         TabIndex        =   31
+         Top             =   2280
+         Visible         =   0   'False
+         Width           =   975
+         _ExtentX        =   1720
+         _ExtentY        =   1508
+         SortKey         =   2
+         View            =   3
+         LabelEdit       =   1
+         Sorted          =   -1  'True
+         LabelWrap       =   -1  'True
+         HideSelection   =   -1  'True
+         FullRowSelect   =   -1  'True
+         GridLines       =   -1  'True
+         _Version        =   393217
+         ForeColor       =   -2147483640
+         BackColor       =   -2147483643
+         BorderStyle     =   1
+         Appearance      =   0
+         NumItems        =   5
+         BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+            Object.Width           =   0
+         EndProperty
+         BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+            Alignment       =   2
+            SubItemIndex    =   1
+            Text            =   "No"
+            Object.Width           =   1411
+         EndProperty
+         BeginProperty ColumnHeader(3) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+            Alignment       =   2
+            SubItemIndex    =   2
+            Text            =   "Kode"
+            Object.Width           =   0
+         EndProperty
+         BeginProperty ColumnHeader(4) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+            SubItemIndex    =   3
+            Text            =   "Nama"
+            Object.Width           =   5998
+         EndProperty
+         BeginProperty ColumnHeader(5) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+            SubItemIndex    =   4
+            Text            =   "Botol Ukuran"
+            Object.Width           =   0
+         EndProperty
+      End
+      Begin VB.TextBox TxtKet 
+         Appearance      =   0  'Flat
          BeginProperty Font 
-            Name            =   "MS Sans Serif"
+            Name            =   "Arial Unicode MS"
             Size            =   12
             Charset         =   0
             Weight          =   400
@@ -380,16 +448,16 @@ Begin VB.Form FrmKecelakaan
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   420
-         ItemData        =   "FrmKecelakaan.frx":002F
+         Height          =   1635
          Left            =   2280
-         List            =   "FrmKecelakaan.frx":0039
-         Style           =   2  'Dropdown List
-         TabIndex        =   4
-         Top             =   1200
-         Width           =   2175
+         MultiLine       =   -1  'True
+         ScrollBars      =   2  'Vertical
+         TabIndex        =   30
+         Text            =   "FrmKecelakaan.frx":002F
+         Top             =   1680
+         Width           =   4215
       End
-      Begin VB.TextBox txtPass 
+      Begin VB.TextBox TxtNama 
          Appearance      =   0  'Flat
          BeginProperty Font 
             Name            =   "Arial Unicode MS"
@@ -401,15 +469,55 @@ Begin VB.Form FrmKecelakaan
             Strikethrough   =   0   'False
          EndProperty
          Height          =   375
-         IMEMode         =   3  'DISABLE
-         Left            =   2280
-         PasswordChar    =   "*"
-         TabIndex        =   3
+         Left            =   3120
+         TabIndex        =   28
          Text            =   "Text1"
          Top             =   720
-         Width           =   4215
+         Width           =   3375
       End
-      Begin VB.TextBox txtNama 
+      Begin VB.TextBox TxtKode 
+         Alignment       =   2  'Center
+         Appearance      =   0  'Flat
+         BackColor       =   &H00FFFF80&
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "Arial Unicode MS"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   2280
+         Locked          =   -1  'True
+         TabIndex        =   27
+         Text            =   "Text1"
+         Top             =   720
+         Width           =   855
+      End
+      Begin VB.ComboBox cboLevel 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   420
+         ItemData        =   "FrmKecelakaan.frx":0035
+         Left            =   2280
+         List            =   "FrmKecelakaan.frx":003F
+         Style           =   2  'Dropdown List
+         TabIndex        =   3
+         Top             =   240
+         Width           =   2175
+      End
+      Begin VB.TextBox TxtJml 
+         Alignment       =   2  'Center
          Appearance      =   0  'Flat
          BeginProperty Font 
             Name            =   "Arial Unicode MS"
@@ -424,13 +532,13 @@ Begin VB.Form FrmKecelakaan
          Left            =   2280
          TabIndex        =   2
          Text            =   "Text1"
-         Top             =   240
-         Width           =   4215
+         Top             =   1200
+         Width           =   2175
       End
-      Begin VB.Label Label5 
+      Begin VB.Label Label6 
          AutoSize        =   -1  'True
          BackStyle       =   0  'Transparent
-         Caption         =   "Level"
+         Caption         =   "Keterangan"
          BeginProperty Font 
             Name            =   "Arial Unicode MS"
             Size            =   12
@@ -442,14 +550,14 @@ Begin VB.Form FrmKecelakaan
          EndProperty
          Height          =   315
          Left            =   120
-         TabIndex        =   27
-         Top             =   1200
-         Width           =   645
+         TabIndex        =   29
+         Top             =   1680
+         Width           =   1395
       End
-      Begin VB.Label Label4 
+      Begin VB.Label Label5 
          AutoSize        =   -1  'True
          BackStyle       =   0  'Transparent
-         Caption         =   "Password"
+         Caption         =   "Jumlah "
          BeginProperty Font 
             Name            =   "Arial Unicode MS"
             Size            =   12
@@ -462,13 +570,13 @@ Begin VB.Form FrmKecelakaan
          Height          =   315
          Left            =   120
          TabIndex        =   26
-         Top             =   720
-         Width           =   1185
+         Top             =   1200
+         Width           =   930
       End
-      Begin VB.Label Label1 
+      Begin VB.Label Label4 
          AutoSize        =   -1  'True
          BackStyle       =   0  'Transparent
-         Caption         =   "Username"
+         Caption         =   "Kode / Name"
          BeginProperty Font 
             Name            =   "Arial Unicode MS"
             Size            =   12
@@ -480,9 +588,28 @@ Begin VB.Form FrmKecelakaan
          EndProperty
          Height          =   315
          Left            =   120
-         TabIndex        =   13
+         TabIndex        =   25
+         Top             =   720
+         Width           =   1560
+      End
+      Begin VB.Label Label1 
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "Inventory"
+         BeginProperty Font 
+            Name            =   "Arial Unicode MS"
+            Size            =   12
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Left            =   120
+         TabIndex        =   12
          Top             =   240
-         Width           =   1230
+         Width           =   1125
       End
    End
    Begin VB.PictureBox picHeadBg 
@@ -493,7 +620,7 @@ Begin VB.Form FrmKecelakaan
       Left            =   0
       ScaleHeight     =   825
       ScaleWidth      =   6945
-      TabIndex        =   9
+      TabIndex        =   8
       Top             =   0
       Width           =   6975
       Begin VB.Label lblSubHead 
@@ -511,7 +638,7 @@ Begin VB.Form FrmKecelakaan
          EndProperty
          Height          =   375
          Left            =   0
-         TabIndex        =   11
+         TabIndex        =   10
          Top             =   480
          Width           =   6975
       End
@@ -530,7 +657,7 @@ Begin VB.Form FrmKecelakaan
          EndProperty
          Height          =   495
          Left            =   0
-         TabIndex        =   10
+         TabIndex        =   9
          Top             =   0
          Width           =   6975
       End
@@ -584,11 +711,8 @@ Private Sub awal()
         'sql = "SELECT * FROM kategori order by kategori_nama"          'query untuk menampilkan data kategori
         'nama listview untuk menampilkan data adalah LvData sehingga paramternya adalah sql, LvData
         'Call modulGencil.tampilData(sql, LvData)
-            
-            
+    TxtNama_DblClick
 End Sub
-
-
 
 Private Sub Form_Load()
     '1. memanggil method (sub) yang ada dimodulGencil untuk membuka koneksi ke database
@@ -597,7 +721,8 @@ Private Sub Form_Load()
     '2. memanggil method / sub awal untuk mengatur objek2 ke kondisi semula
     Call awal
     
-    
+    'posisi listview pencarian kode / nama
+    LvDetail.Move 2280, 1080, 4215, 2295
 End Sub
 
 'atur paging
@@ -609,7 +734,7 @@ End Sub
 Private Sub cmdReload_Click()
     'inisiasi (perkenalan) variabel
     Dim strTbl As String
-        strTbl = "user"
+        strTbl = "kecelakaan"
     Dim strLimit As String
     Dim intStart As Integer
         strLimit = ""
@@ -617,21 +742,22 @@ Private Sub cmdReload_Click()
     Dim strWhere As String
         strWhere = ""
         If Me.txtCari <> "" Then
-            strWhere = " WHERE user_nama like '%" & modulGencil.AntiSQLi(Me.txtCari) & "%'"
+            strWhere = " WHERE parfum_nama like '%" & modulGencil.AntiSQLi(Me.txtCari) & "%' OR "
+            strWhere = strWhere & " botol_tipe like '%" & modulGencil.AntiSQLi(Me.txtCari) & "%' OR "
+            strWhere = strWhere & " kecelakaan_tanggal like '%" & modulGencil.AntiSQLi(Me.txtCari) & "%' "
+            
         End If
     'paging
     If LCase(cboPerPage.Text) <> "semua" Then
         intStart = ((Val(cboPerPage.Text) * Val(txtPagingPos))) - Val(cboPerPage.Text)
         strLimit = " LIMIT " & intStart & ", " & cboPerPage
         
-        If pagingValid(cboPerPage, txtPagingPos, "user", strWhere) = False Then
+        If paging_kecelakaan(cboPerPage, txtPagingPos, strWhere) = False Then
             GoTo err
         End If
     End If
         
-    sql = "SELECT * FROM " & strTbl & strWhere & " order by user_nama " & strLimit
-    Call modulGencil.tampilData(sql, LvData, intStart + 1)
-    Call model.user_set_lv(LvData)
+    Call show_kecelakaan(LvData, strWhere, strLimit, intStart + 1)
     
     lblPagingTotal.Caption = get_total_data(strTbl)
     Exit Sub
@@ -689,6 +815,81 @@ Dim intStart As Integer
 '    LvData.ColumnHeaders(ColumnHeader.Index).Icon = LvData.SortOrder + 1
 End Sub
 
+Private Sub set_lv_cari_botol()
+    Dim i%
+    For i = 1 To LvDetail.ListItems.Count
+        LvDetail.ListItems(i).SubItems(3) = LvDetail.ListItems(i).SubItems(3) & " " & LvDetail.ListItems(i).SubItems(4) & " ml"
+    Next
+End Sub
+
+Private Sub batal_cari()
+    LvDetail.ListItems.Clear
+    LvDetail.Visible = False
+    txtNama.Text = ""
+    TxtKode.Text = ""
+End Sub
+
+Private Sub cari_detail()
+On Error GoTo err
+    If LCase(cboLevel.Text) = "parfum" Then
+        sql = "SELECT parfum_id, parfum_nama,'dummy' FROM parfum WHERE parfum_nama like '%" & AntiSQLi(txtNama) & "%' order by parfum_nama"
+    Else
+        sql = "SELECT botol_id, botol_tipe, botol_ukuran FROM botol WHERE botol_tipe like '%" & _
+                AntiSQLi(txtNama) & "%' OR botol_ukuran like '%" & AntiSQLi(txtNama) & "%' order by botol_tipe"
+    End If
+    Call modulGencil.tampilData(sql, LvDetail)
+    LvDetail.Visible = True
+    
+    If LCase(cboLevel.Text) = "botol" Then set_lv_cari_botol
+    Exit Sub
+err:
+    MsgBox "Error when trying to search, please check your input value!", vbInformation, "Error"
+End Sub
+
+Private Sub LvDetail_Click()
+    If LvDetail.ListItems.Count > 0 Then
+        If lenString(LvDetail.SelectedItem.SubItems(3)) > 0 Then
+            TxtKode = LvDetail.SelectedItem.SubItems(2)
+            txtNama = LvDetail.SelectedItem.SubItems(3)
+            
+            LvDetail.Visible = False
+            txtNama.Locked = True
+            cboLevel.Locked = True
+            txtNama.BackColor = &HC0C000
+        End If
+    End If
+End Sub
+
+Private Sub TxtNama_Change()
+    If (lenString(txtNama) = 0) Then
+        batal_cari
+    Else
+        cari_detail
+    End If
+End Sub
+
+Private Sub TxtNama_DblClick()
+    txtNama.BackColor = &H80000005
+    txtNama.Locked = False
+    cboLevel.Locked = False
+    batal_cari
+End Sub
+
+Private Sub TxtNama_KeyPress(KeyAscii As Integer)
+    If KeyAscii >= Asc("0") And KeyAscii <= Asc("9") Then
+    ElseIf KeyAscii >= Asc("a") And KeyAscii <= Asc("z") Then
+    ElseIf KeyAscii >= Asc("A") And KeyAscii <= Asc("Z") Then
+    ElseIf KeyAscii = vbKeySpace Then
+    ElseIf KeyAscii = vbKeyBack Then
+    ElseIf KeyAscii = vbKeyEscape Then
+        batal_cari
+    ElseIf KeyAscii = 13 Then
+        cari_detail
+    Else
+        KeyAscii = 0
+    End If
+End Sub
+
 'ke nomer halaman tertentu
 Private Sub txtPagingPos_KeyPress(KeyAscii As Integer)
     If KeyAscii >= Asc("0") And KeyAscii <= Asc("9") Then
@@ -722,8 +923,8 @@ Private Sub cmdSave_Click()
 On Error GoTo jikaError                     'apabila terjadi error maka proses akan dilompati ke jikaError:
     'deklarasikan variabel yang diperlukan untuk proses penyimpanan data kedalam database
     Dim namaTabel As String                 'untuk menyimpan nama tabel
-    namaTabel = "user"                  'set nilai dari namaTabel adalah kategori (nama tabel didatabase yang akan diproses)
-    Dim nilaiValue(3) As String             'untuk menyimpan nilai dari field. disimpan dalam bentuk array.
+    namaTabel = "kecelakaan"                  'set nilai dari namaTabel adalah kategori (nama tabel didatabase yang akan diproses)
+    Dim nilaiValue(6) As String             'untuk menyimpan nilai dari field. disimpan dalam bentuk array.
                                             'nilai dalam tanda kurung (1), satu artinya bahwa tabel tersebut memiliki 2 field (1+1).
                                             'karena array selalu dimulai dengan 0.
                                             'jadi kalo diperinci hasilnya seperti ini :
@@ -747,17 +948,24 @@ On Error GoTo jikaError                     'apabila terjadi error maka proses a
     'sehingga cukup digunakan dengan lenString(txtNama) > 0 untuk menyatakan bahwa data yang diinput tidak kosong atau spasi saja.
     
     'validasi pertama, jika data yang diinput kosong atau hanya spasi saja
-        If lenString(Me.txtNama) = 0 Then
+        If lenString(Me.TxtKode) = 0 Then
             'tampilkan pesan bahwa data inputan tidak boleh kosong
-            MsgBox "Data Username masih kosong, silahkan dilengkapi. ", vbInformation, "Validasi"
+            MsgBox "Input masih kosong, silahkan diisi", vbInformation, "Validasi"
             Me.txtNama.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
             Exit Sub                            'keluar dari sub cmdSave
         End If
         
-        If lenString(Me.txtPass) = 0 Then
+        If lenString(Me.TxtJml) = 0 Then
             'tampilkan pesan bahwa data inputan tidak boleh kosong
-            MsgBox "Data password masih kosong, silahkan dilengkapi. ", vbInformation, "Validasi"
-            Me.txtPass.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
+            MsgBox "Jumlah masih kosong, silahkan dilengkapi. ", vbInformation, "Validasi"
+            Me.TxtJml.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
+            Exit Sub                            'keluar dari sub cmdSave
+        End If
+        
+        If lenString(Me.TxtKet) = 0 Then
+            'tampilkan pesan bahwa data inputan tidak boleh kosong
+            MsgBox "Keterangan masih kosong, silahkan dilengkapi. ", vbInformation, "Validasi"
+            Me.TxtKet.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
             Exit Sub                            'keluar dari sub cmdSave
         End If
     
@@ -769,17 +977,6 @@ On Error GoTo jikaError                     'apabila terjadi error maka proses a
     '       nama kolom      = "kategori_nama"
     '       kondisi         = "kategori_nama = txtNama
     'untuk kondisi sebaiknya kita tampung dalam sebuah variabel, misal strWhere.
-        Dim strWhere As String
-        strWhere = "user_nama =" & modulGencil.AntiSQLiWithQuotes(txtNama)  'gunakan fungsi antiSqLiWithQuotes untuk keamanan
-                                                                                'selengkapnya silahkan cari di google apa itu SQL injection
-        'jika nama kategori sudah ada
-        If modulGencil.isDuplicate(namaTabel, "user_nama", strWhere) Then
-            'tampilkan pesan kalo nama kategori sudah terdaftar
-            MsgBox "Username sudah terdaftar", vbInformation, "Validasi"
-            Me.txtNama.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
-            Exit Sub                            'keluar dari sub cmdSave
-        End If
-    
     'apabila sudah tidak ada lagi validasi yang diperlukan, maka yang diperlukan terakhir adalah konfirmasi
     response = MsgBox("yakin menambahkan data?", vbQuestion + vbYesNo, "Konfirmasi")
     If response = vbYes Then
@@ -791,10 +988,13 @@ On Error GoTo jikaError                     'apabila terjadi error maka proses a
         '       array value data = nilaiValue
         'untuk itu kita perlu mendefinisikan nilai dari tiap2 value
         nilaiValue(0) = "null"                          'diset null karena kategori_id nya autoincrement
-        nilaiValue(1) = modulGencil.AntiSQLi(txtNama)   'yang digunakan adalah antiSQLi saja, bukan antiSQLIwithQuotes
+        nilaiValue(1) = modulGencil.AntiSQLi(Format(Now(), "yyyy-mm-dd hh:mm:ss"))  'yang digunakan adalah antiSQLi saja, bukan antiSQLIwithQuotes
                                                         'karena proses quotes sudah dilakukan di method saveData
-        nilaiValue(2) = modulGencil.AntiSQLi(txtPass)
-        nilaiValue(3) = modulGencil.AntiSQLi(IIf(LCase(cboLevel.Text) = "admin", "1", "0"))
+        nilaiValue(2) = IIf(LCase(cboLevel) = "parfum", AntiSQLi(TxtKode), "null")
+        nilaiValue(3) = IIf(LCase(cboLevel) = "botol", AntiSQLi(TxtKode), "null")
+        nilaiValue(4) = AntiSQLi(TxtJml)
+        nilaiValue(5) = AntiSQLi(TxtKet)
+        nilaiValue(6) = AntiSQLi(usrID)
         'simpan data ke database
         If (modulGencil.saveData(namaTabel, nilaiValue)) Then
             'apabila berhasil disimpan

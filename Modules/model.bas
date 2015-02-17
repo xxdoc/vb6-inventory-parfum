@@ -1,4 +1,74 @@
 Attribute VB_Name = "model"
+
+Function paging_kecelakaan(cbo As ComboBox, nilai As Integer, Optional strWhere As String = "") As Boolean
+    Dim total As Integer
+    Dim perpage As Integer
+        perpage = Val(cbo.Text)
+    
+    sql = "SELECT count(kecelakaan_id) as jml " & _
+          "FROM kecelakaan k " & _
+          "  LEFT JOIN parfum p on k.kecelakaan_parfum_id = p.parfum_id " & _
+          "  LEFT JOIN botol b on k.kecelakaan_botol_id = b.botol_id " & _
+          "  LEFT JOIN user u on k.kecelakaan_user_id = u.user_id "
+    sql = sql & strWhere
+    Set Rs = Conn.Execute(sql)
+    total = Rs.Fields(0)
+    
+    If (nilai * perpage) > (total + perpage) Then
+        paging_kecelakaan = False
+    Else
+        paging_kecelakaan = True
+    End If
+End Function
+
+Public Sub show_kecelakaan(lv As ListView, Optional strWhere As String = "", Optional strLimit As String = "", Optional intStart As Integer = 1)
+On Error GoTo err
+Dim i As Integer
+Dim j As Integer
+    lv.ListItems.Clear
+    sql = "SELECT k.kecelakaan_id, k.kecelakaan_tanggal, " & _
+          "IF(k.kecelakaan_parfum_id is NULL,'BOTOL','PARFUM') as tipe, " & _
+          "IF(k.kecelakaan_parfum_id is NULL, CONCAT(b.botol_tipe,' ', b.botol_ukuran, ' ml') ,p.parfum_nama) as nama, " & _
+          "k.kecelakaan_jumlah , k.kecelakaan_keterangan, u.user_nama " & _
+          "FROM kecelakaan k " & _
+          "  LEFT JOIN parfum p on k.kecelakaan_parfum_id = p.parfum_id " & _
+          "  LEFT JOIN botol b on k.kecelakaan_botol_id = b.botol_id " & _
+          "  LEFT JOIN user u on k.kecelakaan_user_id = u.user_id "
+    sql = sql & strWhere
+    sql = sql & " ORDER BY kecelakaan_tanggal desc "
+    sql = sql & strLimit
+    
+    Set Rs = Conn.Execute(sql)
+    j = intStart
+    While Not Rs.EOF
+        With lv.ListItems.Add
+            .Text = ""
+            .SubItems(1) = j
+            For i = 1 To Rs.Fields.Count
+                If (i = 2) Then
+                    .SubItems(i + 1) = IIf(IsNull(Rs(i - 1)), "", Format(Rs(i - 1), "dd-mm-yyyy (hh:mm:ss)"))
+                Else
+                    .SubItems(i + 1) = IIf(IsNull(Rs(i - 1)), "", Rs(i - 1))
+                End If
+            Next
+        End With
+        Rs.MoveNext
+        j = j + 1
+    Wend
+    Rs.Close
+    
+    If lv.ListItems.Count > 0 Then
+        'default sort
+        lv.SortOrder = lvwAscending
+        lv.SortKey = 0
+        'lv.ColumnHeaders(1).Icon = 1
+        lv.ListItems(1).Selected = True
+    End If
+Exit Sub
+err:
+    MsgBox "Terjadi kesalahan, data tidak dapat diload sempurna", vbExclamation, "Warning"
+End Sub
+
 Public Sub show_form(frm As Form, frm_parent As Form, Optional modal As Integer = 1)
     frm.Show modal, frm_parent
 End Sub

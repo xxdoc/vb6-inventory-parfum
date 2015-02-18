@@ -233,7 +233,7 @@ Begin VB.Form FrmKecelakaan
          BackColor       =   -2147483643
          BorderStyle     =   1
          Appearance      =   0
-         NumItems        =   9
+         NumItems        =   10
          BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
             Object.Width           =   0
          EndProperty
@@ -282,6 +282,12 @@ Begin VB.Form FrmKecelakaan
             SubItemIndex    =   8
             Text            =   "Oleh"
             Object.Width           =   2646
+         EndProperty
+         BeginProperty ColumnHeader(10) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+            Alignment       =   2
+            SubItemIndex    =   9
+            Text            =   "ID KODE"
+            Object.Width           =   0
          EndProperty
       End
       Begin VB.TextBox txtCari 
@@ -671,6 +677,7 @@ Attribute VB_Exposed = False
 '4.2 proses edit data
 '    deklarasikan variabel yang akan menampung ID (primary) dari data yang akan di edit
 Dim tmpID As Variant
+Dim isCaridetail As Boolean
 
 
 '2.1 membuat method / sub untuk kondisi awal ketika form ditampilkan
@@ -678,6 +685,7 @@ Private Sub awal()
     Me.LblHead = appTitlte              'set title header form
     Me.lblSubHead = "Data Kecelakaan"     'set sub title form
     Me.cboLevel.ListIndex = 0
+    isCaridetail = True
     'kosongkan semua textfield dengan memanggil method penghapus isi textfield di modul gencil
     'nama method tersebut adalah ClearAllText dengan paramter berupa nama form.
     'parameter nama form tersebut bisa diisi dengan nama form ini yaitu frmKategori, bisa juga dengan alias "ME"
@@ -825,22 +833,24 @@ End Sub
 Private Sub batal_cari()
     LvDetail.ListItems.Clear
     LvDetail.Visible = False
-    txtNama.Text = ""
+    TxtNama.Text = ""
     TxtKode.Text = ""
 End Sub
 
 Private Sub cari_detail()
 On Error GoTo err
-    If LCase(cboLevel.Text) = "parfum" Then
-        sql = "SELECT parfum_id, parfum_nama,'dummy' FROM parfum WHERE parfum_nama like '%" & AntiSQLi(txtNama) & "%' order by parfum_nama"
-    Else
-        sql = "SELECT botol_id, botol_tipe, botol_ukuran FROM botol WHERE botol_tipe like '%" & _
-                AntiSQLi(txtNama) & "%' OR botol_ukuran like '%" & AntiSQLi(txtNama) & "%' order by botol_tipe"
+    If isCaridetail = True Then
+        If LCase(cboLevel.Text) = "parfum" Then
+            sql = "SELECT parfum_id, parfum_nama,'dummy' FROM parfum WHERE parfum_nama like '%" & AntiSQLi(TxtNama) & "%' order by parfum_nama"
+        Else
+            sql = "SELECT botol_id, botol_tipe, botol_ukuran FROM botol WHERE botol_tipe like '%" & _
+                    AntiSQLi(TxtNama) & "%' OR botol_ukuran like '%" & AntiSQLi(TxtNama) & "%' order by botol_tipe"
+        End If
+        Call modulGencil.tampilData(sql, LvDetail)
+        LvDetail.Visible = True
+        
+        If LCase(cboLevel.Text) = "botol" Then set_lv_cari_botol
     End If
-    Call modulGencil.tampilData(sql, LvDetail)
-    LvDetail.Visible = True
-    
-    If LCase(cboLevel.Text) = "botol" Then set_lv_cari_botol
     Exit Sub
 err:
     MsgBox "Error when trying to search, please check your input value!", vbInformation, "Error"
@@ -850,18 +860,18 @@ Private Sub LvDetail_Click()
     If LvDetail.ListItems.Count > 0 Then
         If lenString(LvDetail.SelectedItem.SubItems(3)) > 0 Then
             TxtKode = LvDetail.SelectedItem.SubItems(2)
-            txtNama = LvDetail.SelectedItem.SubItems(3)
+            TxtNama = LvDetail.SelectedItem.SubItems(3)
             
             LvDetail.Visible = False
-            txtNama.Locked = True
+            TxtNama.Locked = True
             cboLevel.Locked = True
-            txtNama.BackColor = &HC0C000
+            TxtNama.BackColor = &HC0C000
         End If
     End If
 End Sub
 
 Private Sub TxtNama_Change()
-    If (lenString(txtNama) = 0) Then
+    If (lenString(TxtNama) = 0) Then
         batal_cari
     Else
         cari_detail
@@ -869,8 +879,8 @@ Private Sub TxtNama_Change()
 End Sub
 
 Private Sub TxtNama_DblClick()
-    txtNama.BackColor = &H80000005
-    txtNama.Locked = False
+    TxtNama.BackColor = &H80000005
+    TxtNama.Locked = False
     cboLevel.Locked = False
     batal_cari
 End Sub
@@ -915,7 +925,7 @@ Private Sub cmdAdd_Click()
                             False, True, False, False, True)
     
     'arahkan kursor ke textfield nama kategori
-    Me.txtNama.SetFocus
+    Me.TxtNama.SetFocus
 End Sub
 
 '3.2 ketika tombol simpan diklik
@@ -951,7 +961,7 @@ On Error GoTo jikaError                     'apabila terjadi error maka proses a
         If lenString(Me.TxtKode) = 0 Then
             'tampilkan pesan bahwa data inputan tidak boleh kosong
             MsgBox "Input masih kosong, silahkan diisi", vbInformation, "Validasi"
-            Me.txtNama.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
+            Me.TxtNama.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
             Exit Sub                            'keluar dari sub cmdSave
         End If
         
@@ -1017,22 +1027,29 @@ End Sub
 '4.2.1 Memilih data yang akan diedit
 '    ketika data yang tampil di listview di klik, maka kita perlu mengatur agar data tersebut tampil di form
 Private Sub LvData_Click()
+    isCaridetail = False
     'cek apakah list view memiliki data
     If LvData.ListItems.Count > 0 Then
         With LvData.SelectedItem        'buat short code untuk akses LVData.SelectedItem sehingga nanti setiap objek yang
                                         'kita tulis diawali dengan tanda titik (dot), maka akan mereferensi ke LvData.SelectedItem
             tmpID = .SubItems(2)        'isi dengan kolom yg menampung ID kategori yang disembunyikan di listview, untuk
                                         'melakukan pengecekan, silahkan klik kanan kemudian pilih properties pada listview
-            txtNama = .SubItems(3)      'isi txtNama dengan kolom yang menampilkan nama kategori dari ListView
-            cboLevel.ListIndex = IIf(LCase(.SubItems(5)) = "admin", 1, 0)
+            
+            cboLevel.ListIndex = IIf(LCase(.SubItems(4)) = "parfum", 0, 1)
+            TxtNama = .SubItems(5)
+            TxtJml = .SubItems(6)
+            TxtKet = .SubItems(7)
+            TxtKode = .SubItems(9)
             Call modulGencil.enableAllText(True, Me) 'aktifkan textfield
             'aktifkan tombol edit dan batal
             Call modulGencil.tombol(cmdAdd, cmdSave, cmdEdit, cmdDel, cmdCancel, _
                                 False, False, True, True, True)
         End With                        'tutup short code LVData.selectedItem
-        txtNama.SetFocus                        'arahkan kursor ke txtNama
-        Call modulGencil.getFocused(txtNama)    'seleksi semua karakter yang ada di txtnama
+        TxtNama.SetFocus                        'arahkan kursor ke txtNama
+        Call modulGencil.getFocused(TxtNama)    'seleksi semua karakter yang ada di txtnama
     End If
+    
+    isCaridetail = True
 End Sub
 
 '4.2.2 Melakukan Edit Data ketika tombol edit diklik
@@ -1040,33 +1057,30 @@ Private Sub cmdEdit_Click()
 On Error GoTo jikaError     'error handling seperti proses simpan
     'deklarasi variabel seperti di proses simpan
     Dim namaTabel As String
-    namaTabel = "user"
-    Dim namaKolom(3) As String
-    Dim nilaiValue(3) As String
+        namaTabel = "kecelakaan"
+    Dim strWhere As String
+    Dim namaKolom(4) As String
+    Dim nilaiValue(4) As String
     
     'cek apakah inputan nama kosong atau tidak
-    If (modulGencil.lenString(Me.txtNama) = 0) Then
-        Beep
-        Me.txtNama.SetFocus
-        Exit Sub
+    If lenString(Me.TxtKode) = 0 Then
+        'tampilkan pesan bahwa data inputan tidak boleh kosong
+        MsgBox "Input masih kosong, silahkan diisi", vbInformation, "Validasi"
+        Me.TxtNama.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
+        Exit Sub                            'keluar dari sub cmdSave
     End If
     
-    'validasi data ganda ini hampir sama dengan ketika di save (langkah 3.2),
-    'bedanya, misal sebelum di edit nama kategori adalah "Manly", maka validasinya adalah isian nama tidak boleh sama dengan
-    'yang sudah ada didatabase kecuali "Manly". artinya ketika melakukan edit, user boleh memasukkan nama yang sama dengan
-    'sebelum di edit, dalam contoh ini yaitu "Manly"
-    'untuk itu kita perlu tau ID Data "Manly" apa, sehingga bisa melakukan pencarian nama yang sudah terdaftar selain ID tersebut.
-    'ID ini sudah kita simpan sebelumnya dengan nama tmpID (perhatikan langkah 4.2.1)
+    If lenString(Me.TxtJml) = 0 Then
+        'tampilkan pesan bahwa data inputan tidak boleh kosong
+        MsgBox "Jumlah masih kosong, silahkan dilengkapi. ", vbInformation, "Validasi"
+        Me.TxtJml.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
+        Exit Sub                            'keluar dari sub cmdSave
+    End If
     
-    Dim strWhere As String
-    strWhere = "user_nama=" & modulGencil.AntiSQLiWithQuotes(Me.txtNama) & _
-               " AND user_id NOT in (" & modulGencil.AntiSQLiWithQuotes(str(tmpID)) & ")"  'str(tmpID) adalah mengubah tipe data tmpID yang semula adalah variant jadi string
-               
-    'jika nama kategori sudah ada
-    If modulGencil.isDuplicate(namaTabel, "user_nama", strWhere) Then
-        'tampilkan pesan kalo nama kategori sudah terdaftar
-        MsgBox "Username sudah terdaftar", vbInformation, "Validasi"
-        Me.txtNama.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
+    If lenString(Me.TxtKet) = 0 Then
+        'tampilkan pesan bahwa data inputan tidak boleh kosong
+        MsgBox "Keterangan masih kosong, silahkan dilengkapi. ", vbInformation, "Validasi"
+        Me.TxtKet.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
         Exit Sub                            'keluar dari sub cmdSave
     End If
     
@@ -1074,17 +1088,20 @@ On Error GoTo jikaError     'error handling seperti proses simpan
     'konfirmasi perubahan data
     response = MsgBox("yakin mengganti data?", vbQuestion + vbYesNo + vbDefaultButton1, "Konfirmasi Edit")
     If response = vbYes Then
-        namaKolom(0) = "user_id"
+        namaKolom(0) = "kecelakaan_id"
         nilaiValue(0) = modulGencil.AntiSQLi(str(tmpID))
         
-        namaKolom(1) = "user_nama"
-        nilaiValue(1) = modulGencil.AntiSQLi(Me.txtNama)
+        namaKolom(1) = IIf(LCase(cboLevel) = "parfum", "kecelakaan_parfum_id", "kecelakaan_botol_id")
+        nilaiValue(1) = modulGencil.AntiSQLi(Me.TxtKode)
         
-        namaKolom(2) = "user_password"
-        nilaiValue(2) = IIf(lenString(Me.txtPass) = 0, "_NOT_CHANGE_", modulGencil.AntiSQLi(Me.txtPass))
+        namaKolom(2) = "kecelakaan_jumlah"
+        nilaiValue(2) = modulGencil.AntiSQLi(TxtJml)
         
-        namaKolom(3) = "user_level"
-        nilaiValue(3) = modulGencil.AntiSQLi(IIf(LCase(cboLevel.Text) = "admin", "1", "0"))
+        namaKolom(3) = "kecelakaan_keterangan"
+        nilaiValue(3) = modulGencil.AntiSQLi(TxtKet)
+        
+        namaKolom(4) = "kecelakaan_user_id"
+        nilaiValue(4) = modulGencil.AntiSQLi(usrID)
                 
         'data mana yang akan diganti?
         strWhere = namaKolom(0) & " = " & modulGencil.AntiSQLiWithQuotes(str(tmpID))
@@ -1110,10 +1127,10 @@ Private Sub cmdDel_Click()
 On Error GoTo jikaError
     'deklarasi variabel
     Dim namaTabel As String
-    namaTabel = "user"
+    namaTabel = "kecelakaan"
     
     Dim strWhere As String
-    strWhere = "user_id=" & modulGencil.AntiSQLiWithQuotes(str(tmpID))
+    strWhere = "kecelakaan_id=" & modulGencil.AntiSQLiWithQuotes(str(tmpID))
     'konfirmasi
     response = MsgBox("yakin menghapus data?", vbQuestion + vbYesNo + vbDefaultButton2, "Konfirmasi Hapus")
     If response = vbYes Then

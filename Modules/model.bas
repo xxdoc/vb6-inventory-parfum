@@ -29,7 +29,8 @@ Dim j As Integer
     sql = "SELECT k.kecelakaan_id, k.kecelakaan_tanggal, " & _
           "IF(k.kecelakaan_parfum_id is NULL,'BOTOL','PARFUM') as tipe, " & _
           "IF(k.kecelakaan_parfum_id is NULL, CONCAT(b.botol_tipe,' ', b.botol_ukuran, ' ml') ,p.parfum_nama) as nama, " & _
-          "k.kecelakaan_jumlah , k.kecelakaan_keterangan, u.user_nama " & _
+          "k.kecelakaan_jumlah , k.kecelakaan_keterangan, u.user_nama, " & _
+          "IF(k.kecelakaan_parfum_id is NULL, b.botol_id ,p.parfum_id) as id " & _
           "FROM kecelakaan k " & _
           "  LEFT JOIN parfum p on k.kecelakaan_parfum_id = p.parfum_id " & _
           "  LEFT JOIN botol b on k.kecelakaan_botol_id = b.botol_id " & _

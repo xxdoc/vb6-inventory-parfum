@@ -28,7 +28,7 @@ Begin VB.Form frmLogin
       Height          =   390
       Left            =   3000
       TabIndex        =   4
-      Top             =   1245
+      Top             =   1320
       Width           =   1140
    End
    Begin VB.CommandButton cmdCancel 
@@ -37,7 +37,7 @@ Begin VB.Form frmLogin
       Height          =   390
       Left            =   4200
       TabIndex        =   5
-      Top             =   1245
+      Top             =   1320
       Width           =   1140
    End
    Begin VB.TextBox txtPassword 

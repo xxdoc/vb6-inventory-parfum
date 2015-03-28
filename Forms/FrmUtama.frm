@@ -35,13 +35,13 @@ Begin VB.Form FrmUtama
          BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   6
             Alignment       =   1
-            TextSave        =   "2/15/2015"
+            TextSave        =   "3/29/2015"
             Object.ToolTipText     =   "Tanggal Sistem Saat Ini"
          EndProperty
          BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   5
             Alignment       =   1
-            TextSave        =   "1:36 PM"
+            TextSave        =   "12:32 AM"
             Object.ToolTipText     =   "Waktu Saat Ini"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
@@ -136,8 +136,14 @@ Private Sub formComponent()
             Next
         statusBar.Panels(6).MinWidth = Abs(Val(Me.Width) - stsWidth)
         statusBar.Panels(1).Text = usrName
-        
-                
+    'atur hak akses
+    hakAkses
+End Sub
+
+Private Sub hakAkses()
+    If usrLevel = 0 Then
+        mn_master_data.Visible = False
+    End If
 End Sub
 
 Private Sub awal()
@@ -174,6 +180,10 @@ End Sub
 
 Private Sub mn_inventory_kecelakaan_Click()
     Call show_form(FrmKecelakaan, Me)
+End Sub
+
+Private Sub mn_inventory_keluar_Click()
+    Call show_form(FrmOutput, Me)
 End Sub
 
 Private Sub mn_kategori_Click()

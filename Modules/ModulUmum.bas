@@ -34,8 +34,8 @@ Sub main()
     usrID = "1"
     usrName = "admin"
     usrLevel = "1"
-    frmSplash.Show
-    'FrmOutput.Show
+    'frmSplash.Show
+    FrmLaporan.Show
 End Sub
 
 'sub untuk menghubungkan dengan database

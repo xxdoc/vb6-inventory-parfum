@@ -7,12 +7,12 @@ Begin VB.Form FrmUser
    ClientHeight    =   7575
    ClientLeft      =   45
    ClientTop       =   390
-   ClientWidth     =   6870
+   ClientWidth     =   6945
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   7575
-   ScaleWidth      =   6870
+   ScaleWidth      =   6945
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdAdd 
       Caption         =   "&Tambah"
@@ -714,7 +714,7 @@ Private Sub cmdAdd_Click()
                             False, True, False, False, True)
     
     'arahkan kursor ke textfield nama kategori
-    Me.txtNama.SetFocus
+    Me.TxtNama.SetFocus
 End Sub
 
 '3.2 ketika tombol simpan diklik
@@ -747,10 +747,10 @@ On Error GoTo jikaError                     'apabila terjadi error maka proses a
     'sehingga cukup digunakan dengan lenString(txtNama) > 0 untuk menyatakan bahwa data yang diinput tidak kosong atau spasi saja.
     
     'validasi pertama, jika data yang diinput kosong atau hanya spasi saja
-        If lenString(Me.txtNama) = 0 Then
+        If lenString(Me.TxtNama) = 0 Then
             'tampilkan pesan bahwa data inputan tidak boleh kosong
             MsgBox "Data Username masih kosong, silahkan dilengkapi. ", vbInformation, "Validasi"
-            Me.txtNama.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
+            Me.TxtNama.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
             Exit Sub                            'keluar dari sub cmdSave
         End If
         
@@ -770,13 +770,13 @@ On Error GoTo jikaError                     'apabila terjadi error maka proses a
     '       kondisi         = "kategori_nama = txtNama
     'untuk kondisi sebaiknya kita tampung dalam sebuah variabel, misal strWhere.
         Dim strWhere As String
-        strWhere = "user_nama =" & modulGencil.AntiSQLiWithQuotes(txtNama)  'gunakan fungsi antiSqLiWithQuotes untuk keamanan
+        strWhere = "user_nama =" & modulGencil.AntiSQLiWithQuotes(TxtNama)  'gunakan fungsi antiSqLiWithQuotes untuk keamanan
                                                                                 'selengkapnya silahkan cari di google apa itu SQL injection
         'jika nama kategori sudah ada
         If modulGencil.isDuplicate(namaTabel, "user_nama", strWhere) Then
             'tampilkan pesan kalo nama kategori sudah terdaftar
             MsgBox "Username sudah terdaftar", vbInformation, "Validasi"
-            Me.txtNama.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
+            Me.TxtNama.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
             Exit Sub                            'keluar dari sub cmdSave
         End If
     
@@ -791,7 +791,7 @@ On Error GoTo jikaError                     'apabila terjadi error maka proses a
         '       array value data = nilaiValue
         'untuk itu kita perlu mendefinisikan nilai dari tiap2 value
         nilaiValue(0) = "null"                          'diset null karena kategori_id nya autoincrement
-        nilaiValue(1) = modulGencil.AntiSQLi(txtNama)   'yang digunakan adalah antiSQLi saja, bukan antiSQLIwithQuotes
+        nilaiValue(1) = modulGencil.AntiSQLi(TxtNama)   'yang digunakan adalah antiSQLi saja, bukan antiSQLIwithQuotes
                                                         'karena proses quotes sudah dilakukan di method saveData
         nilaiValue(2) = modulGencil.AntiSQLi(txtPass)
         nilaiValue(3) = modulGencil.AntiSQLi(IIf(LCase(cboLevel.Text) = "admin", "1", "0"))
@@ -823,15 +823,15 @@ Private Sub LvData_Click()
                                         'kita tulis diawali dengan tanda titik (dot), maka akan mereferensi ke LvData.SelectedItem
             tmpID = .SubItems(2)        'isi dengan kolom yg menampung ID kategori yang disembunyikan di listview, untuk
                                         'melakukan pengecekan, silahkan klik kanan kemudian pilih properties pada listview
-            txtNama = .SubItems(3)      'isi txtNama dengan kolom yang menampilkan nama kategori dari ListView
+            TxtNama = .SubItems(3)      'isi txtNama dengan kolom yang menampilkan nama kategori dari ListView
             cboLevel.ListIndex = IIf(LCase(.SubItems(5)) = "admin", 1, 0)
             Call modulGencil.enableAllText(True, Me) 'aktifkan textfield
             'aktifkan tombol edit dan batal
             Call modulGencil.tombol(cmdAdd, cmdSave, cmdEdit, cmdDel, cmdCancel, _
                                 False, False, True, True, True)
         End With                        'tutup short code LVData.selectedItem
-        txtNama.SetFocus                        'arahkan kursor ke txtNama
-        Call modulGencil.getFocused(txtNama)    'seleksi semua karakter yang ada di txtnama
+        TxtNama.SetFocus                        'arahkan kursor ke txtNama
+        Call modulGencil.getFocused(TxtNama)    'seleksi semua karakter yang ada di txtnama
     End If
 End Sub
 
@@ -845,9 +845,9 @@ On Error GoTo jikaError     'error handling seperti proses simpan
     Dim nilaiValue(3) As String
     
     'cek apakah inputan nama kosong atau tidak
-    If (modulGencil.lenString(Me.txtNama) = 0) Then
+    If (modulGencil.lenString(Me.TxtNama) = 0) Then
         Beep
-        Me.txtNama.SetFocus
+        Me.TxtNama.SetFocus
         Exit Sub
     End If
     
@@ -859,14 +859,14 @@ On Error GoTo jikaError     'error handling seperti proses simpan
     'ID ini sudah kita simpan sebelumnya dengan nama tmpID (perhatikan langkah 4.2.1)
     
     Dim strWhere As String
-    strWhere = "user_nama=" & modulGencil.AntiSQLiWithQuotes(Me.txtNama) & _
+    strWhere = "user_nama=" & modulGencil.AntiSQLiWithQuotes(Me.TxtNama) & _
                " AND user_id NOT in (" & modulGencil.AntiSQLiWithQuotes(str(tmpID)) & ")"  'str(tmpID) adalah mengubah tipe data tmpID yang semula adalah variant jadi string
                
     'jika nama kategori sudah ada
     If modulGencil.isDuplicate(namaTabel, "user_nama", strWhere) Then
         'tampilkan pesan kalo nama kategori sudah terdaftar
         MsgBox "Username sudah terdaftar", vbInformation, "Validasi"
-        Me.txtNama.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
+        Me.TxtNama.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
         Exit Sub                            'keluar dari sub cmdSave
     End If
     
@@ -878,7 +878,7 @@ On Error GoTo jikaError     'error handling seperti proses simpan
         nilaiValue(0) = modulGencil.AntiSQLi(str(tmpID))
         
         namaKolom(1) = "user_nama"
-        nilaiValue(1) = modulGencil.AntiSQLi(Me.txtNama)
+        nilaiValue(1) = modulGencil.AntiSQLi(Me.TxtNama)
         
         namaKolom(2) = "user_password"
         nilaiValue(2) = IIf(lenString(Me.txtPass) = 0, "_NOT_CHANGE_", modulGencil.AntiSQLi(Me.txtPass))

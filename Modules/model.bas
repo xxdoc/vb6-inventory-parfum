@@ -1,4 +1,163 @@
 Attribute VB_Name = "model"
+Public Function is_query_have_row(query As String) As Boolean
+On Error GoTo keluar
+    is_query_have_row = False
+    Set Rs = Conn.Execute(query)
+    If Not Rs.EOF Then
+        is_query_have_row = True
+    End If
+    Exit Function
+keluar:
+    is_query_have_row = False
+End Function
+
+Public Sub list_kategori(cbo As ComboBox)
+    sql = "SELECT * FROM kategori order by kategori_nama"
+    Set Rs = Conn.Execute(sql)
+    While Not Rs.EOF
+        cbo.AddItem Rs!kategori_nama
+        Rs.MoveNext
+    Wend
+End Sub
+
+Public Sub lv_inventory(lv As ListView, tglAwal As String, tglAkhir As String)
+    Dim i%
+    
+    For i = 1 To lv.ListItems.Count
+        lv.ListItems(i).SubItems(6) = get_sirkulasi_total(lv.ListItems(i).SubItems(3), lv.ListItems(i).SubItems(2), tglAwal, tglAkhir)
+        lv.ListItems(i).SubItems(7) = get_output_total(lv.ListItems(i).SubItems(3), lv.ListItems(i).SubItems(2), tglAwal, tglAkhir)
+        lv.ListItems(i).SubItems(8) = get_kecelakaan_total(lv.ListItems(i).SubItems(3), lv.ListItems(i).SubItems(2), tglAwal, tglAkhir)
+        lv.ListItems(i).SubItems(4) = IIf(LCase(lv.ListItems(i).SubItems(3)) = "parfum", get_parfum_kategori(lv.ListItems(i).SubItems(2)), lv.ListItems(i).SubItems(4))
+    Next
+End Sub
+
+Function get_parfum_kategori(id As String) As String
+    get_parfum_kategori = ""
+    sql = "SELECT k.kategori_nama " & _
+         "FROM parfum_kategori pk " & _
+         "JOIN kategori k on pk.pk_kategori_id = k.kategori_id " & _
+         "where pk_parfum_id = " & AntiSQLiWithQuotes(id)
+    Set Rs = Conn.Execute(sql)
+    Dim i%, temp$
+    i = 1
+    While Not Rs.EOF
+        temp = IIf(i = 1, Rs!kategori_nama, ", " & Rs!kategori_nama)
+        get_parfum_kategori = get_parfum_kategori & temp
+        i = i + 1
+        Rs.MoveNext
+    Wend
+End Function
+
+Function get_sirkulasi_total(tipe As String, id As String, tglAwal As String, tglAkhir As String) As Double
+Dim strWhere$
+    get_sirkulasi_total = 0
+    strWhere = " WHERE detail_botol_id = " & AntiSQLiWithQuotes(id)
+        If (LCase(tipe) = "parfum") Then
+            strWhere = " WHERE detail_parfum_id = " & AntiSQLiWithQuotes(id)
+        End If
+    strWhere = strWhere & " AND s.sirkulasi_status = '1' AND s.sirkulasi_tanggal_terima BETWEEN " & AntiSQLiWithQuotes(tglAwal) & " AND " & AntiSQLiWithQuotes(tglAkhir)
+    sql = "SELECT sd.detail_parfum_id as parfum_id, sd.detail_botol_id as botol_id, SUM(detail_jml_terima_bersih) as jml_bersih, SUM(detail_jml_terima_kotor) As jml_kotor " & _
+          "From sirkulasi_detail sd JOIN sirkulasi s on sd.detail_sirkulasi_id = s.sirkulasi_id " & _
+          strWhere & _
+          " GROUP BY sd.detail_parfum_id, sd.detail_botol_id"
+    Set Rs = Conn.Execute(sql)
+    If Not Rs.EOF Then
+        get_sirkulasi_total = Rs!jml_bersih
+    End If
+End Function
+
+Function get_kecelakaan_total(tipe As String, id As String, tglAwal As String, tglAkhir As String) As Double
+Dim strWhere$
+    get_kecelakaan_total = 0
+    strWhere = " WHERE kecelakaan_botol_id = " & AntiSQLiWithQuotes(id)
+        If (LCase(tipe) = "parfum") Then
+            strWhere = " WHERE kecelakaan_parfum_id = " & AntiSQLiWithQuotes(id)
+        End If
+    strWhere = strWhere & " AND kecelakaan_tanggal BETWEEN " & AntiSQLiWithQuotes(tglAwal) & " AND " & AntiSQLiWithQuotes(tglAkhir)
+    sql = "SELECT kecelakaan_parfum_id, kecelakaan_botol_id, SUM(kecelakaan_jumlah) as jml  FROM kecelakaan " & strWhere
+    sql = sql & " GROUP BY kecelakaan_parfum_id, kecelakaan_botol_id"
+    Set Rs = Conn.Execute(sql)
+    If Not Rs.EOF Then
+        get_kecelakaan_total = Rs!jml
+    End If
+End Function
+
+Function get_output_total(tipe As String, id As String, tglAwal As String, tglAkhir As String) As Double
+Dim strWhere$
+    get_output_total = 0
+    strWhere = " WHERE odetail_botol_id = " & AntiSQLiWithQuotes(id)
+        If (LCase(tipe) = "parfum") Then
+            strWhere = " WHERE odetail_parfum_id = " & AntiSQLiWithQuotes(id)
+        End If
+    strWhere = strWhere & " AND o.output_tanggal BETWEEN " & AntiSQLiWithQuotes(tglAwal) & " AND " & AntiSQLiWithQuotes(tglAkhir)
+    sql = "SELECT od.odetail_parfum_id as parfum_id, od.odetail_botol_id as botol_id, SUM(od.odetail_jml) as jml_keluar " & _
+          "From output_detail od JOIN output o ON od.odetail_output_id = o.output_id " & _
+          strWhere & _
+          " GROUP BY od.odetail_parfum_id, od.odetail_botol_id "
+    Set Rs = Conn.Execute(sql)
+    If Not Rs.EOF Then
+        get_output_total = Rs!jml_keluar
+    End If
+End Function
+
+
+Function paging_inventory(cbo As ComboBox, nilai As Integer, strTable As String, Optional strWhere As String = "") As Boolean
+    Dim total As Integer
+    Dim perpage As Integer
+        perpage = Val(cbo.Text)
+    
+    sql = "SELECT count(DISTINCT(id)) as jml FROM vw_summary_inventory "
+    sql = sql & strWhere
+    Set Rs = Conn.Execute(sql)
+    total = Rs.Fields(0)
+    
+    If (nilai * perpage) > (total + perpage) Then
+        paging_inventory = False
+    Else
+        paging_inventory = True
+    End If
+End Function
+
+Public Sub show_inventory(lv As ListView, Optional strWhere As String = "", _
+                            Optional strLimit As String = "", _
+                            Optional intStart As Integer = 1)
+On Error GoTo err
+Dim i As Integer
+Dim j As Integer
+    lv.ListItems.Clear
+    sql = "SELECT * FROM vw_summary_inventory"
+    sql = sql & strWhere
+    sql = sql & " ORDER BY nama "
+    sql = sql & strLimit
+    Set Rs = Conn.Execute(sql)
+    j = intStart
+    While Not Rs.EOF
+        With lv.ListItems.Add
+            .Text = ""
+            .SubItems(1) = j
+            
+             For i = 1 To Rs.Fields.Count
+                .SubItems(i + 1) = IIf(IsNull(Rs(i - 1)), "", Rs(i - 1))
+            Next
+            j = j + 1
+        End With
+    
+        Rs.MoveNext
+    Wend
+    Rs.Close
+    
+    If lv.ListItems.Count > 0 Then
+        'default sort
+        lv.SortOrder = lvwAscending
+        lv.SortKey = 0
+        'lv.ColumnHeaders(1).Icon = 1
+        lv.ListItems(1).Selected = True
+    End If
+Exit Sub
+err:
+    MsgBox "Terjadi kesalahan, data tidak dapat diload sempurna", vbExclamation, "Warning"
+End Sub
+
 
 Function paging_kecelakaan(cbo As ComboBox, nilai As Integer, Optional strWhere As String = "") As Boolean
     Dim total As Integer

@@ -35,13 +35,13 @@ Begin VB.Form FrmUtama
          BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   6
             Alignment       =   1
-            TextSave        =   "3/29/2015"
+            TextSave        =   "4/23/2015"
             Object.ToolTipText     =   "Tanggal Sistem Saat Ini"
          EndProperty
          BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   5
             Alignment       =   1
-            TextSave        =   "12:32 AM"
+            TextSave        =   "9:38 PM"
             Object.ToolTipText     =   "Waktu Saat Ini"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
@@ -188,6 +188,10 @@ End Sub
 
 Private Sub mn_kategori_Click()
     Call show_form(FrmKategori, Me)
+End Sub
+
+Private Sub mn_laporan_Click()
+    Call show_form(FrmLaporan, Me)
 End Sub
 
 Private Sub mn_parfum_Click()

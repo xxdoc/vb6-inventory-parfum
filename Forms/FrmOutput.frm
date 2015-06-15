@@ -42,7 +42,7 @@ Begin VB.Form FrmOutput
             Strikethrough   =   0   'False
          EndProperty
          CustomFormat    =   "dd/MM/yyyy"
-         Format          =   121896963
+         Format          =   138018819
          CurrentDate     =   42091
       End
       Begin VB.TextBox txtResume 
@@ -640,6 +640,8 @@ Attribute VB_Exposed = False
 '    deklarasikan variabel yang akan menampung ID (primary) dari data yang akan di edit
 Dim tmpID As Variant
 Dim isCaridetail As Boolean
+Dim currentStok As Double
+Dim tempStok As Double
 
 
 '2.1 membuat method / sub untuk kondisi awal ketika form ditampilkan
@@ -697,7 +699,7 @@ valid_item = True
         MsgBox "Kode masih kosong", vbInformation
         valid_item = False
         Exit Function
-    ElseIf lenString(TxtNama) = 0 Then
+    ElseIf lenString(txtNama) = 0 Then
         MsgBox "Nama masih kosong", vbInformation
         valid_item = False
         Exit Function
@@ -725,7 +727,7 @@ Private Sub cmdTambah_Click()
                 .SubItems(1) = LvData.ListItems.Count
                 .SubItems(2) = cboLevel
                 .SubItems(3) = TxtKode
-                .SubItems(4) = TxtNama
+                .SubItems(4) = txtNama
                 .SubItems(5) = TxtJml
                 .SubItems(6) = TxtKet
             End With
@@ -800,7 +802,7 @@ End Sub
 Private Sub batal_cari()
     LvDetail.ListItems.Clear
     LvDetail.Visible = False
-    TxtNama.Text = ""
+    txtNama.Text = ""
     TxtKode.Text = ""
 End Sub
 
@@ -808,10 +810,10 @@ Private Sub cari_detail()
 On Error GoTo err
     If isCaridetail = True Then
         If LCase(cboLevel.Text) = "parfum" Then
-            sql = "SELECT parfum_id, parfum_nama,'dummy' FROM parfum WHERE parfum_nama like '%" & AntiSQLi(TxtNama) & "%' order by parfum_nama"
+            sql = "SELECT parfum_id, parfum_nama,'dummy' FROM parfum WHERE parfum_nama like '%" & AntiSQLi(txtNama) & "%' order by parfum_nama"
         Else
             sql = "SELECT botol_id, botol_tipe, botol_ukuran FROM botol WHERE botol_tipe like '%" & _
-                    AntiSQLi(TxtNama) & "%' OR botol_ukuran like '%" & AntiSQLi(TxtNama) & "%' order by botol_tipe"
+                    AntiSQLi(txtNama) & "%' OR botol_ukuran like '%" & AntiSQLi(txtNama) & "%' order by botol_tipe"
         End If
         Call modulGencil.tampilData(sql, LvDetail)
         LvDetail.Visible = True
@@ -826,13 +828,19 @@ End Sub
 Private Sub LvDetail_Click()
     If LvDetail.ListItems.Count > 0 Then
         If lenString(LvDetail.SelectedItem.SubItems(3)) > 0 Then
+            'get current stok
+                'Dim jmlList As Double
+                'Dim jmlWhere As String
+                        'jmlWhere = "2-" & LCase(cboLevel.Text) & ",3-" & LvDetail.SelectedItem.SubItems(2)
+                    'jmlList = sum_lv_items(LvData, 5, jmlWhere)
+                    
             TxtKode = LvDetail.SelectedItem.SubItems(2)
-            TxtNama = LvDetail.SelectedItem.SubItems(3)
+            txtNama = LvDetail.SelectedItem.SubItems(3)
             
             LvDetail.Visible = False
-            TxtNama.Locked = True
+            txtNama.Locked = True
             cboLevel.Locked = True
-            TxtNama.BackColor = &HC0C000
+            txtNama.BackColor = &HC0C000
             
             TxtJml.SetFocus
         End If
@@ -852,7 +860,7 @@ Private Sub TxtJml_KeyPress(KeyAscii As Integer)
 End Sub
 
 Private Sub TxtNama_Change()
-    If (lenString(TxtNama) = 0) Then
+    If (lenString(txtNama) = 0) Then
         batal_cari
     Else
         cari_detail
@@ -860,8 +868,8 @@ Private Sub TxtNama_Change()
 End Sub
 
 Private Sub TxtNama_DblClick()
-    TxtNama.BackColor = &H80000005
-    TxtNama.Locked = False
+    txtNama.BackColor = &H80000005
+    txtNama.Locked = False
     cboLevel.Locked = False
     batal_cari
 End Sub
@@ -893,7 +901,7 @@ Private Sub cmdAdd_Click()
     tombol_utama (False)
     
     'arahkan kursor ke textfield nama kategori
-    Me.TxtNama.SetFocus
+    Me.txtNama.SetFocus
 End Sub
 
 '3.2 ketika tombol simpan diklik
@@ -909,6 +917,10 @@ On Error GoTo jikaError                     'apabila terjadi error maka proses a
             'tampilkan pesan bahwa data inputan tidak boleh kosong
             MsgBox "List inventory masih kosong!", vbInformation, "Validasi"
             Exit Sub                            'keluar dari sub cmdSave
+        End If
+        
+        If (cek_valid_stok(LvData, 2, 3, 4, 5) = False) Then
+            Exit Sub
         End If
                 
         'aktifkan kalo ini wajib
@@ -928,7 +940,7 @@ On Error GoTo jikaError                     'apabila terjadi error maka proses a
     '       kondisi         = "kategori_nama = txtNama
     'untuk kondisi sebaiknya kita tampung dalam sebuah variabel, misal strWhere.
     'apabila sudah tidak ada lagi validasi yang diperlukan, maka yang diperlukan terakhir adalah konfirmasi
-    response = MsgBox("yakin menambahkan data?", vbQuestion + vbYesNo, "Konfirmasi")
+    response = MsgBox("Data yang ditambahkan tidak dapat dibatalkan mohon diperiksa kembali, yakin menambahkan data?", vbQuestion + vbYesNo, "Konfirmasi")
     If response = vbYes Then
         'apabila tombol yes ditekan pada saat confirm dialog muncul
         'lakukan proses simpan data dengan memanggil method saveData yang ada dimodule gencil
@@ -958,6 +970,19 @@ On Error GoTo jikaError                     'apabila terjadi error maka proses a
                     d_value(5) = AntiSQLi(LvData.ListItems(i).SubItems(6))
                     
                     If (modulGencil.saveData(d_tbl, d_value)) Then
+                        'get stok
+                            If (LCase(LvData.ListItems(i).SubItems(2)) = "parfum") Then
+                                currentStok = get_parfum_stok(LvData.ListItems(i).SubItems(3))
+                            Else
+                                currentStok = get_botol_stok(LvData.ListItems(i).SubItems(3))
+                            End If
+                        'update stok
+                        Dim newstok As Double
+                            If (LCase(cboLevel) = "parfum") Then
+                                newstok = update_parfum_stok(CDbl(currentStok), CDbl(Val(LvData.ListItems(i).SubItems(5)) * -1), LvData.ListItems(i).SubItems(3))
+                            ElseIf (LCase(cboLevel) = "botol") Then
+                                newstok = update_botol_stok(CDbl(currentStok), CDbl(Val(LvData.ListItems(i).SubItems(5)) * -1), LvData.ListItems(i).SubItems(3))
+                            End If
                     Else
                         GoTo jikaError
                     End If
@@ -990,14 +1015,14 @@ Private Sub LvData_Click()
         With LvData.SelectedItem
             cboLevel.Text = .SubItems(2)
             TxtKode = .SubItems(3)
-            TxtNama = .SubItems(4)
+            txtNama = .SubItems(4)
             TxtJml = .SubItems(5)
             TxtKet = .SubItems(6)
             
             LvDetail.Visible = False
-            TxtNama.Locked = True
+            txtNama.Locked = True
             cboLevel.Locked = True
-            TxtNama.BackColor = &HC0C000
+            txtNama.BackColor = &HC0C000
         End With
         LvData.ListItems.Remove (LvData.SelectedItem.Index)
         lblPagingTotal = LvData.ListItems.Count
@@ -1011,13 +1036,3 @@ Private Sub cmdCancel_Click()
     Call awal       'panggil sub awal
 End Sub
 
-
-'6. Proses Pencarian Data
-Private Sub txtCari_Change()
-    'jika textfield pencarian kosong, maka tampilkan data awal
-    If (modulGencil.lenString(Me.txtCari) = 0) Then
-        Call awal
-    Else
-        
-    End If
-End Sub

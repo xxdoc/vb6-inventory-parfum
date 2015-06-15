@@ -42,7 +42,7 @@ Begin VB.Form FrmInput
             Strikethrough   =   0   'False
          EndProperty
          CustomFormat    =   "dd/MM/yyyy"
-         Format          =   153747459
+         Format          =   97255427
          CurrentDate     =   42091
       End
       Begin VB.TextBox txtResume 
@@ -1012,12 +1012,3 @@ Private Sub cmdCancel_Click()
 End Sub
 
 
-'6. Proses Pencarian Data
-Private Sub txtCari_Change()
-    'jika textfield pencarian kosong, maka tampilkan data awal
-    If (modulGencil.lenString(Me.txtCari) = 0) Then
-        Call awal
-    Else
-        
-    End If
-End Sub

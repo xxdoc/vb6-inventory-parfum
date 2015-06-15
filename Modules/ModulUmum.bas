@@ -30,12 +30,14 @@ Public usrID As String
 Public usrName As String
 Public usrLevel As String
 
-Sub main()
+Sub Main()
     usrID = "1"
     usrName = "admin"
     usrLevel = "1"
-    'frmSplash.Show
-    FrmLaporan.Show
+    frmSplash.Show
+    'FrmLaporan.Show
+    'FrmUtama.Show
+    'FrmMasuk.Show
 End Sub
 
 'sub untuk menghubungkan dengan database
@@ -195,10 +197,10 @@ Sub jmlRecord(lbl As Label, lv As ListView)
     lbl.Caption = "Jumlah Record : " & jml
 End Sub
 
-Function isDuplicate(tbl$, kol$, qWhere$) As Boolean
+Function isDuplicate(tbl$, kol$, qwhere$) As Boolean
 On Error GoTo err
 isDuplicate = False
-    sql = "select " & kol & " from " & tbl & " WHERE " & qWhere
+    sql = "select " & kol & " from " & tbl & " WHERE " & qwhere
     Set Rs = Conn.Execute(sql)
     If Not Rs.EOF Then
         If IsNull(Rs(0)) = False Then
@@ -451,10 +453,10 @@ getStok = 0
 err:
 End Function
 
-Public Function getValues(tbl As String, kol As String, qWhere As String) As Variant
+Public Function getValues(tbl As String, kol As String, qwhere As String) As Variant
 On Error GoTo err
     getValues = ""
-    sql = "select " & kol & " from " & tbl & " WHere " & qWhere
+    sql = "select " & kol & " from " & tbl & " WHere " & qwhere
     Set Rs = Conn.Execute(sql)
     If Not Rs.EOF Then
         getValues = Rs(0)

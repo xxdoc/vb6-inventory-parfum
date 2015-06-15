@@ -35,13 +35,13 @@ Begin VB.Form FrmUtama
          BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   6
             Alignment       =   1
-            TextSave        =   "4/23/2015"
+            TextSave        =   "6/15/2015"
             Object.ToolTipText     =   "Tanggal Sistem Saat Ini"
          EndProperty
          BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   5
             Alignment       =   1
-            TextSave        =   "9:38 PM"
+            TextSave        =   "6:29 AM"
             Object.ToolTipText     =   "Waktu Saat Ini"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
@@ -85,6 +85,10 @@ Begin VB.Form FrmUtama
          Caption         =   "Data &Botol"
          Shortcut        =   ^B
       End
+      Begin VB.Menu mn_supplier 
+         Caption         =   "Data &Supplier"
+         Shortcut        =   ^S
+      End
       Begin VB.Menu mn_parfum 
          Caption         =   "Data Parfum"
          Shortcut        =   ^P
@@ -110,15 +114,17 @@ Begin VB.Form FrmUtama
    End
    Begin VB.Menu mn_about 
       Caption         =   "About"
+      Visible         =   0   'False
    End
    Begin VB.Menu mn_setting 
       Caption         =   "Setting"
+      Visible         =   0   'False
       Begin VB.Menu mn_password 
          Caption         =   "&Ganti Password"
       End
-      Begin VB.Menu mn_logout 
-         Caption         =   "&Log Out"
-      End
+   End
+   Begin VB.Menu mn_logout 
+      Caption         =   "&Log Out"
    End
 End
 Attribute VB_Name = "FrmUtama"
@@ -186,16 +192,30 @@ Private Sub mn_inventory_keluar_Click()
     Call show_form(FrmOutput, Me)
 End Sub
 
+Private Sub mn_inventory_masuk_Click()
+    Call show_form(FrmMasuk, Me)
+End Sub
+
 Private Sub mn_kategori_Click()
     Call show_form(FrmKategori, Me)
 End Sub
 
 Private Sub mn_laporan_Click()
-    Call show_form(FrmLaporan, Me)
+    Me.Enabled = False
+    FrmLaporan.Show
+End Sub
+
+Private Sub mn_logout_Click()
+    frmLogin.Show
+    Unload Me
 End Sub
 
 Private Sub mn_parfum_Click()
     Call show_form(FrmParfum, Me)
+End Sub
+
+Private Sub mn_supplier_Click()
+    Call show_form(FrmSupplier, Me)
 End Sub
 
 Private Sub mn_user_Click()

@@ -11,6 +11,7 @@ Begin VB.Form FrmLaporan
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
+   Moveable        =   0   'False
    ScaleHeight     =   2640
    ScaleWidth      =   5130
    StartUpPosition =   1  'CenterOwner
@@ -60,7 +61,7 @@ Begin VB.Form FrmLaporan
          Strikethrough   =   0   'False
       EndProperty
       CustomFormat    =   "dd/MM/yyyy"
-      Format          =   99680259
+      Format          =   146538499
       CurrentDate     =   41563
    End
    Begin MSComCtl2.DTPicker tglAkhir 
@@ -82,7 +83,7 @@ Begin VB.Form FrmLaporan
          Strikethrough   =   0   'False
       EndProperty
       CustomFormat    =   "dd/MM/yyyy"
-      Format          =   100401155
+      Format          =   146538499
       CurrentDate     =   41563
    End
    Begin VB.Label lblData 
@@ -203,4 +204,8 @@ Private Sub Form_Load()
     Koneksi
     awal
     cboJenis.ListIndex = 0
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    FrmUtama.Enabled = True
 End Sub

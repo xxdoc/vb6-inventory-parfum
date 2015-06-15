@@ -1,4 +1,108 @@
 Attribute VB_Name = "model"
+Public Sub set_data_masuk(lv As ListView)
+'On Error Resume Next
+    For i = 1 To lv.ListItems.Count
+        lv.ListItems(i).SubItems(3) = Format(lv.ListItems(i).SubItems(3), "dd-mm-yy H:m")
+        lv.ListItems(i).SubItems(4) = Format(lv.ListItems(i).SubItems(4), "dd-mm-yy H:m")
+        lv.ListItems(i).SubItems(5) = IIf(lv.ListItems(i).SubItems(5) = "99", "batal", _
+            IIf(lv.ListItems(i).SubItems(5) = "1", "diterima", "pesan"))
+    Next
+End Sub
+
+Public Function cek_valid_stok(lv As ListView, tipe As Integer, kode As Integer, nama As Integer, jml As Integer) As Boolean
+    On Error GoTo keluar
+    Dim cStok As Double
+    cek_valid_stok = True
+    For i = 1 To lv.ListItems.Count
+        If (lv.ListItems(i).SubItems(tipe) = "parfum") Then
+            cStok = get_parfum_stok(lv.ListItems(i).SubItems(kode))
+        Else
+            cStok = get_botol_stok(lv.ListItems(i).SubItems(kode))
+        End If
+        
+        If (Val(lv.ListItems(i).SubItems(jml)) > cStok) Then
+            MsgBox "Stok untuk " & lv.ListItems(i).SubItems(tipe) & " " & _
+                lv.ListItems(i).SubItems(nama) & " hanya " & cStok, vbExclamation, "Stok tidak cukup"
+            GoTo keluar
+        End If
+    Next
+    Exit Function
+keluar:
+    cek_valid_stok = False
+End Function
+
+
+'Public Function sum_lv_items(lv As ListView, indexJml As Integer, Optional qwhere As String = "") As Double
+''On Error GoTo keluar
+'    sum_lv_items = 0
+'    'MsgBox ("LISTCOUNT : " & lv.ListItems.Count)
+'    For i = 1 To lv.ListItems.Count
+'        If qwhere = "" Then
+'            sum_lv_items = sum_lv_items + lv.ListItems(i).SubItems(indexJml)
+'        Else
+'            Dim qitems() As String
+'            qitems = Split(qwhere, ",")
+'            'MsgBox "QITEMS : " & UBound(qitems)
+'            For ix = 0 To UBound(qitems)
+'                MsgBox (qitems(ix))
+'            Next
+'        End If
+'    Next
+'    Exit Function
+'keluar:
+'    sum_lv_items = 0
+'End Function
+
+Public Function update_parfum_stok(iCur As Double, iJml As Double, pID As String) As Boolean
+On Error GoTo keluar
+    update_parfum_stok = True
+    Dim stok As Double
+        stok = iCur + iJml
+    sql = "UPDATE parfum set parfum_stok = " & stok & " WHERE parfum_id = " & AntiSQLiWithQuotes(pID)
+    Conn.Execute (sql)
+    Exit Function
+keluar:
+    update_parfum_stok = False
+End Function
+
+Public Function update_botol_stok(iCur As Double, iJml As Double, pID As String) As Boolean
+On Error GoTo keluar
+    update_botol_stok = True
+    Dim stok As Double
+        stok = iCur + iJml
+    sql = "UPDATE botol set botol_stok = " & stok & " WHERE botol_id = " & AntiSQLiWithQuotes(pID)
+    Conn.Execute (sql)
+    Exit Function
+keluar:
+    update_botol_stok = False
+End Function
+
+Public Function get_parfum_stok(pID As String) As Double
+On Error GoTo keluar
+    get_parfum_stok = 0
+    Dim stok As Variant
+    Dim qwhere As String
+        qwhere = " parfum_id = " & AntiSQLiWithQuotes(pID)
+        stok = modulGencil.getValues("parfum", "parfum_stok", qwhere)
+        get_parfum_stok = CDbl(stok)
+    Exit Function
+keluar:
+    get_parfum_stok = 0
+End Function
+
+Public Function get_botol_stok(pID As String) As Double
+On Error GoTo keluar
+    get_botol_stok = 0
+    Dim stok As Variant
+    Dim qwhere As String
+        qwhere = " botol_id = " & AntiSQLiWithQuotes(pID)
+        stok = modulGencil.getValues("botol", "botol_stok", qwhere)
+        get_botol_stok = CDbl(stok)
+    Exit Function
+keluar:
+    get_botol_stok = 0
+End Function
+
 Public Function is_query_have_row(query As String) As Boolean
 On Error GoTo keluar
     is_query_have_row = False

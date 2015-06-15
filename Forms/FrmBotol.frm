@@ -798,7 +798,7 @@ On Error GoTo jikaError                     'apabila terjadi error maka proses a
     'untuk kondisi sebaiknya kita tampung dalam sebuah variabel, misal strWhere.
         Dim strWhere As String
         strWhere = "botol_tipe =" & modulGencil.AntiSQLiWithQuotes(txtTipe)   'gunakan fungsi antiSqLiWithQuotes untuk keamanan
-                                                                                selengkapnya silahkan cari di google apa itu SQL injection
+                                                                               'selengkapnya silahkan cari di google apa itu SQL injection
         strWhere = strWhere & " AND botol_ukuran = " & modulGencil.AntiSQLiWithQuotes(txtUkuran)
         'jika nama tipe dan ukuran sudah ada
         If modulGencil.isDuplicate(namaTabel, "botol_tipe", strWhere) Then

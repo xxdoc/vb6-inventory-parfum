@@ -678,6 +678,8 @@ Attribute VB_Exposed = False
 '    deklarasikan variabel yang akan menampung ID (primary) dari data yang akan di edit
 Dim tmpID As Variant
 Dim isCaridetail As Boolean
+Dim currentStok As Double
+Dim tempStok As Double
 
 
 '2.1 membuat method / sub untuk kondisi awal ketika form ditampilkan
@@ -859,6 +861,12 @@ End Sub
 Private Sub LvDetail_Click()
     If LvDetail.ListItems.Count > 0 Then
         If lenString(LvDetail.SelectedItem.SubItems(3)) > 0 Then
+                'stok
+                If (LCase(cboLevel) = "parfum") Then
+                    currentStok = get_parfum_stok(LvDetail.SelectedItem.SubItems(2))
+                Else
+                    currentStok = get_botol_stok(LvDetail.SelectedItem.SubItems(2))
+                End If
             TxtKode = LvDetail.SelectedItem.SubItems(2)
             TxtNama = LvDetail.SelectedItem.SubItems(3)
             
@@ -965,6 +973,12 @@ On Error GoTo jikaError                     'apabila terjadi error maka proses a
             Exit Sub                            'keluar dari sub cmdSave
         End If
         
+        If (currentStok < Val(Me.TxtJml)) Then
+            MsgBox "Stok yang tersedia hanya " & currentStok
+            Me.TxtJml.SetFocus
+            Exit Sub
+        End If
+        
         If lenString(Me.TxtJml) = 0 Then
             'tampilkan pesan bahwa data inputan tidak boleh kosong
             MsgBox "Jumlah masih kosong, silahkan dilengkapi. ", vbInformation, "Validasi"
@@ -1007,6 +1021,13 @@ On Error GoTo jikaError                     'apabila terjadi error maka proses a
         nilaiValue(6) = AntiSQLi(usrID)
         'simpan data ke database
         If (modulGencil.saveData(namaTabel, nilaiValue)) Then
+            'update stok
+            Dim newstok As Double
+                If (LCase(cboLevel) = "parfum") Then
+                    newstok = update_parfum_stok(CDbl(currentStok), CDbl(Val(TxtJml) * -1), TxtKode.Text)
+                ElseIf (LCase(cboLevel) = "botol") Then
+                    newstok = update_botol_stok(CDbl(currentStok), CDbl(Val(TxtJml) * -1), TxtKode.Text)
+                End If
             'apabila berhasil disimpan
             MsgBox "Data telah disimpan", vbInformation, "Berhasil"     'tampilkan pesan berhasil
             awal                                                        'kembalikan form ke kondisi awal
@@ -1040,6 +1061,16 @@ Private Sub LvData_Click()
             TxtJml = .SubItems(6)
             TxtKet = .SubItems(7)
             TxtKode = .SubItems(9)
+            
+                'tempstok
+                tempStok = .SubItems(6)
+                'current stok
+                'stok
+                If (LCase(cboLevel) = "parfum") Then
+                    currentStok = get_parfum_stok(CStr(.SubItems(9)))
+                Else
+                    currentStok = get_botol_stok(CStr(.SubItems(9)))
+                End If
             Call modulGencil.enableAllText(True, Me) 'aktifkan textfield
             'aktifkan tombol edit dan batal
             Call modulGencil.tombol(cmdAdd, cmdSave, cmdEdit, cmdDel, cmdCancel, _
@@ -1077,6 +1108,12 @@ On Error GoTo jikaError     'error handling seperti proses simpan
         Exit Sub                            'keluar dari sub cmdSave
     End If
     
+    If ((currentStok + tempStok) < Val(Me.TxtJml)) Then
+        MsgBox "Stok (seharusnya) tersedia hanya sebanyak " & (currentStok + tempStok), vbInformation, "Validasi"
+        Me.TxtJml.SetFocus                 'mengarahkan kursor ke txtnama agar bisa langsung diisi
+        Exit Sub
+    End If
+    
     If lenString(Me.TxtKet) = 0 Then
         'tampilkan pesan bahwa data inputan tidak boleh kosong
         MsgBox "Keterangan masih kosong, silahkan dilengkapi. ", vbInformation, "Validasi"
@@ -1108,6 +1145,13 @@ On Error GoTo jikaError     'error handling seperti proses simpan
         
         'edit di database
         If (modulGencil.updateData(namaTabel, namaKolom, nilaiValue, strWhere)) Then
+            'update stok
+            Dim newstok As Double
+                If (LCase(cboLevel) = "parfum") Then
+                    newstok = update_parfum_stok(CDbl(currentStok), CDbl((Val(TxtJml) - tempStok) * -1), TxtKode.Text)
+                ElseIf (LCase(cboLevel) = "botol") Then
+                    newstok = update_botol_stok(CDbl(currentStok), CDbl((Val(TxtJml) - tempStok) * -1), TxtKode.Text)
+                End If
             'apabila berhasil disimpan
             MsgBox "Data telah diganti", vbInformation, "Berhasil"     'tampilkan pesan berhasil
             awal                                                        'kembalikan form ke kondisi awal

@@ -49,7 +49,7 @@ Begin VB.Form FrmMasuk
       Width           =   975
    End
    Begin VB.CommandButton cmdEdit 
-      Caption         =   "&Edit"
+      Caption         =   "&Update"
       BeginProperty Font 
          Name            =   "Arial Unicode MS"
          Size            =   9.75
@@ -451,6 +451,8 @@ Private Sub awal()
     
     cmdReload_Click
     
+    tombolsini True, False, False, False
+    
     'panggil method tampilData di modul gencil untuk load database dan tampilkan di lisview
     'method tampil data memiliki 2 paramter yaitu query dan nama listview
         'sql = "SELECT * FROM kategori order by kategori_nama"          'query untuk menampilkan data kategori
@@ -460,7 +462,12 @@ Private Sub awal()
             
 End Sub
 
-
+Sub tombolsini(tbh As Boolean, edit As Boolean, hapus As Boolean, batal As Boolean)
+    cmdAdd.Enabled = tbh
+    cmdEdit.Enabled = edit
+    cmdDel.Enabled = hapus
+    cmdCancel.Enabled = batal
+End Sub
 
 Private Sub Form_Load()
     '1. memanggil method (sub) yang ada dimodulGencil untuk membuka koneksi ke database
@@ -496,7 +503,7 @@ Private Sub cmdReload_Click()
         intStart = ((Val(cboPerPage.Text) * Val(txtPagingPos))) - Val(cboPerPage.Text)
         strLimit = " LIMIT " & intStart & ", " & cboPerPage
         
-        If pagingValid(cboPerPage, txtPagingPos, "kategori", strWhere) = False Then
+        If pagingValid(cboPerPage, txtPagingPos, "sirkulasi", strWhere) = False Then
             GoTo err
         End If
     End If
@@ -578,7 +585,8 @@ End Sub
 '3. Proses Menambahkan data
 '3.1 Ketika tombol tambah di klik
 Private Sub cmdAdd_Click()
-    
+    Unload Me
+     Call show_form(FrmInput, FrmUtama)
 End Sub
 
 '4. Proses Edit atau hapus data
@@ -590,20 +598,45 @@ Private Sub LvData_Click()
     If LvData.ListItems.Count > 0 Then
         With LvData.SelectedItem        'buat short code untuk akses LVData.SelectedItem sehingga nanti setiap objek yang
                                         'kita tulis diawali dengan tanda titik (dot), maka akan mereferensi ke LvData.SelectedItem
-           
+           sirkulasiID = Trim(.SubItems(2))
+           sirkulasiTgl = .SubItems(3)
+           sirkulasiStatus = .SubItems(5)
         End With                        'tutup short code LVData.selectedItem
+                
+        tombolsini False, True, True, True
     End If
 End Sub
 
 '4.2.2 Melakukan Edit Data ketika tombol edit diklik
 Private Sub cmdEdit_Click()
-
+    Unload Me
+    Call show_form(FrmInputUpdate, FrmUtama)
 End Sub
 
 '4.3 Hapus data
 'ketika tombol hapus di klik
 Private Sub cmdDel_Click()
-
+    On Error GoTo jikaError
+    'deklarasi variabel
+    Dim namaTabel As String
+    namaTabel = "sirkulasi"
+    
+    Dim strWhere As String
+    strWhere = "sirkulasi_id=" & modulGencil.AntiSQLiWithQuotes(sirkulasiID)
+    'konfirmasi
+    response = MsgBox("yakin menghapus data?", vbQuestion + vbYesNo + vbDefaultButton2, "Konfirmasi Hapus")
+    If response = vbYes Then
+        If (delData(namaTabel, strWhere)) Then
+            'apabila berhasil disimpan
+            MsgBox "Data telah dihapus", vbInformation, "Berhasil"     'tampilkan pesan berhasil
+            awal                                                        'kembalikan form ke kondisi awal
+        Else
+            GoTo jikaError
+        End If
+    End If
+    Exit Sub
+jikaError:
+    MsgBox "Data gagal diedit", vbExclamation, "Gagal"     'tampilkan pesan gagal
 End Sub
 
 '5. Membatalkan proses, mengembalikan form ke kondisi awal (seperti ketika baru dibuka/jalankan)

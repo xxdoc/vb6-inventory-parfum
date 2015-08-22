@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form FrmUtama 
    BackColor       =   &H00FFFFFF&
-   Caption         =   "Aplikasi Inventory Rumah Parfum 4"
+   Caption         =   "Aplikasi Inventory Rumah Parfum"
    ClientHeight    =   9765
    ClientLeft      =   60
    ClientTop       =   705
@@ -35,13 +35,13 @@ Begin VB.Form FrmUtama
          BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   6
             Alignment       =   1
-            TextSave        =   "6/15/2015"
+            TextSave        =   "8/21/2015"
             Object.ToolTipText     =   "Tanggal Sistem Saat Ini"
          EndProperty
          BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   5
             Alignment       =   1
-            TextSave        =   "6:29 AM"
+            TextSave        =   "11:20 PM"
             Object.ToolTipText     =   "Waktu Saat Ini"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
@@ -58,8 +58,8 @@ Begin VB.Form FrmUtama
          EndProperty
          BeginProperty Panel6 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Alignment       =   1
-            Text            =   "Aplikasi Inventory Rumah Parfum 4"
-            TextSave        =   "Aplikasi Inventory Rumah Parfum 4"
+            Text            =   "Aplikasi Inventory Rumah Parfum"
+            TextSave        =   "Aplikasi Inventory Rumah Parfum"
          EndProperty
       EndProperty
    End
@@ -221,3 +221,4 @@ End Sub
 Private Sub mn_user_Click()
     Call show_form(FrmUser, Me)
 End Sub
+

@@ -50,12 +50,12 @@ Begin VB.Form frmLogin
       Width           =   2325
    End
    Begin VB.Image Image1 
-      Height          =   1020
+      Height          =   1335
       Left            =   120
       Picture         =   "frmLogin.frx":0000
       Stretch         =   -1  'True
-      Top             =   360
-      Width           =   1515
+      Top             =   240
+      Width           =   1575
    End
    Begin VB.Label lblLabels 
       BackStyle       =   0  'Transparent
@@ -87,6 +87,10 @@ Option Explicit
 
 Private Sub awal()
     Call modulGencil.clearAllText(Me)
+End Sub
+
+Private Sub cmdCancel_Click()
+    Unload Me
 End Sub
 
 Private Sub cmdOK_Click()

@@ -5,20 +5,38 @@ Begin VB.Form FrmInput
    BackColor       =   &H00C0C000&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Inventory Masuk"
-   ClientHeight    =   9330
+   ClientHeight    =   7305
    ClientLeft      =   45
    ClientTop       =   390
    ClientWidth     =   14820
+   ControlBox      =   0   'False
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   9330
+   ScaleHeight     =   7305
    ScaleWidth      =   14820
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CommandButton cmdKembali 
+      Caption         =   "&Kembali"
+      BeginProperty Font 
+         Name            =   "Arial Unicode MS"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   495
+      Left            =   13680
+      TabIndex        =   29
+      Top             =   6720
+      Width           =   975
+   End
    Begin VB.Frame fraKet 
       BackColor       =   &H00FFFFFF&
       BorderStyle     =   0  'None
-      Height          =   2655
+      Height          =   855
       Left            =   120
       TabIndex        =   25
       Top             =   5760
@@ -26,7 +44,7 @@ Begin VB.Form FrmInput
       Begin MSComCtl2.DTPicker DTPicker1 
          Height          =   375
          Left            =   1920
-         TabIndex        =   30
+         TabIndex        =   28
          Top             =   240
          Width           =   1695
          _ExtentX        =   2990
@@ -42,28 +60,8 @@ Begin VB.Form FrmInput
             Strikethrough   =   0   'False
          EndProperty
          CustomFormat    =   "dd/MM/yyyy"
-         Format          =   97255427
+         Format          =   134610947
          CurrentDate     =   42091
-      End
-      Begin VB.TextBox txtResume 
-         Appearance      =   0  'Flat
-         BeginProperty Font 
-            Name            =   "Arial Unicode MS"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   1515
-         Left            =   120
-         MultiLine       =   -1  'True
-         ScrollBars      =   2  'Vertical
-         TabIndex        =   28
-         Text            =   "FrmInput.frx":0000
-         Top             =   960
-         Width           =   14295
       End
       Begin VB.Frame Frame3 
          Appearance      =   0  'Flat
@@ -92,28 +90,9 @@ Begin VB.Form FrmInput
          EndProperty
          Height          =   315
          Left            =   120
-         TabIndex        =   29
+         TabIndex        =   27
          Top             =   240
          Width           =   1050
-      End
-      Begin VB.Label Label7 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Keterangan"
-         BeginProperty Font 
-            Name            =   "Arial Unicode MS"
-            Size            =   12
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   315
-         Left            =   120
-         TabIndex        =   27
-         Top             =   600
-         Width           =   1395
       End
    End
    Begin VB.CommandButton cmdAdd 
@@ -130,7 +109,7 @@ Begin VB.Form FrmInput
       Height          =   495
       Left            =   120
       TabIndex        =   0
-      Top             =   8640
+      Top             =   6720
       Width           =   975
    End
    Begin VB.CommandButton cmdSave 
@@ -145,9 +124,9 @@ Begin VB.Form FrmInput
          Strikethrough   =   0   'False
       EndProperty
       Height          =   495
-      Left            =   13680
+      Left            =   12600
       TabIndex        =   3
-      Top             =   8640
+      Top             =   6720
       Width           =   975
    End
    Begin VB.CommandButton cmdCancel 
@@ -164,7 +143,7 @@ Begin VB.Form FrmInput
       Height          =   495
       Left            =   1200
       TabIndex        =   4
-      Top             =   8640
+      Top             =   6720
       Width           =   975
    End
    Begin VB.Frame fraList 
@@ -401,7 +380,7 @@ Begin VB.Form FrmInput
          MultiLine       =   -1  'True
          ScrollBars      =   2  'Vertical
          TabIndex        =   20
-         Text            =   "FrmInput.frx":0006
+         Text            =   "FrmInput.frx":0000
          Top             =   2280
          Width           =   5655
       End
@@ -456,9 +435,9 @@ Begin VB.Form FrmInput
             Strikethrough   =   0   'False
          EndProperty
          Height          =   420
-         ItemData        =   "FrmInput.frx":000C
+         ItemData        =   "FrmInput.frx":0006
          Left            =   120
-         List            =   "FrmInput.frx":0016
+         List            =   "FrmInput.frx":0010
          Style           =   2  'Dropdown List
          TabIndex        =   2
          Top             =   480
@@ -715,6 +694,11 @@ Private Sub cmdClear_Click()
     TxtKet = ""
 End Sub
 
+Private Sub cmdKembali_Click()
+    Unload Me
+    Call show_form(FrmMasuk, FrmUtama)
+End Sub
+
 Private Sub cmdTambah_Click()
     If valid_item Then
         If cek_eksis(cboLevel, TxtKode, TxtJml) Then
@@ -771,7 +755,6 @@ Private Sub Form_Load()
     'label tanggal
     LblTanggal.Caption = Format(Now(), "dd-mm-yyyy")
 End Sub
-
 
 'sorting dari listview
 Private Sub LvData_ColumnClick(ByVal ColumnHeader As MSComctlLib.ColumnHeader)
@@ -901,8 +884,8 @@ Private Sub cmdSave_Click()
 On Error GoTo jikaError                     'apabila terjadi error maka proses akan dilompati ke jikaError:
     'deklarasikan variabel yang diperlukan untuk proses penyimpanan data kedalam database
     Dim namaTabel As String                 'untuk menyimpan nama tabel
-    namaTabel = "output"                  'set nilai dari namaTabel adalah kategori (nama tabel didatabase yang akan diproses)
-    Dim nilaiValue(3) As String             'untuk menyimpan nilai dari field. disimpan dalam bentuk array.
+    namaTabel = "sirkulasi"                  'set nilai dari namaTabel adalah kategori (nama tabel didatabase yang akan diproses)
+    Dim nilaiValue(4) As String             'untuk menyimpan nilai dari field. disimpan dalam bentuk array.
                                             
     'validasi pertama, jika data yang diinput kosong atau hanya spasi saja
         If LvData.ListItems.Count = 0 Then
@@ -937,27 +920,31 @@ On Error GoTo jikaError                     'apabila terjadi error maka proses a
         '       nama tabel  = namaTabel
         '       array value data = nilaiValue
         'untuk itu kita perlu mendefinisikan nilai dari tiap2 value
-        nilaiValue(0) = AntiSQLi(get_last_id("output", "output_id"))                          'diset null karena kategori_id nya autoincrement
+        nilaiValue(0) = AntiSQLi(get_last_id("sirkulasi", "sirkulasi_id"))                          'diset null karena kategori_id nya autoincrement
         nilaiValue(1) = modulGencil.AntiSQLi(Format(DTPicker1.Value, "yyyy-mm-dd hh:mm:ss"))  'yang digunakan adalah antiSQLi saja, bukan antiSQLIwithQuotes
                                                         'karena proses quotes sudah dilakukan di method saveData
-        nilaiValue(2) = AntiSQLi(txtResume)
+        nilaiValue(2) = "null"
         nilaiValue(3) = AntiSQLi(usrID)
+        nilaiValue(4) = "0"
         'simpan data ke database
         If (modulGencil.saveData(namaTabel, nilaiValue)) Then
             'apabila berhasil disimpan, maka simpan detailnya
             Dim d_tbl$
-            Dim d_value(5) As String
-                d_tbl = "output_detail"
+            Dim d_value(7) As String
+                d_tbl = "sirkulasi_detail"
                 
                 For i = 1 To LvData.ListItems.Count
                     d_value(0) = "null"
                     d_value(1) = nilaiValue(0)
                     d_value(2) = IIf(LvData.ListItems(i).SubItems(2) = "Parfum", AntiSQLi(LvData.ListItems(i).SubItems(3)), "null")
                     d_value(3) = IIf(LvData.ListItems(i).SubItems(2) = "Parfum", "null", AntiSQLi(LvData.ListItems(i).SubItems(3)))
-                    d_value(4) = AntiSQLi(LvData.ListItems(i).SubItems(5))
-                    d_value(5) = AntiSQLi(LvData.ListItems(i).SubItems(6))
+                    d_value(4) = AntiSQLi(LvData.ListItems(i).SubItems(5)) 'jml pesan
+                    d_value(5) = "null" 'jml terima bersih
+                    d_value(6) = "null" 'jml terima kotor
+                    d_value(7) = AntiSQLi(LvData.ListItems(i).SubItems(6)) 'keterangan
                     
                     If (modulGencil.saveData(d_tbl, d_value)) Then
+
                     Else
                         GoTo jikaError
                     End If
@@ -974,7 +961,7 @@ On Error GoTo jikaError                     'apabila terjadi error maka proses a
     Exit Sub    'keluar dari sub
 'kondisi ketika terjadi error dalam prosses
 jikaError:
-    If (delData(namaTabel, "output_id = " & AntiSQLiWithQuotes(nilaiValue(0)))) Then
+    If (delData(namaTabel, "sirkulasi_id = " & AntiSQLiWithQuotes(nilaiValue(0)))) Then
         MsgBox "Data gagal disimpan", vbExclamation, "Gagal"     'tampilkan pesan gagal
     End If
 End Sub

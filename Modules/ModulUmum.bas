@@ -30,13 +30,17 @@ Public usrID As String
 Public usrName As String
 Public usrLevel As String
 
+Public sirkulasiID As String
+Public sirkulasiTgl As String
+Public sirkulasiStatus As String
+
 Sub Main()
     usrID = "1"
     usrName = "admin"
     usrLevel = "1"
-    frmSplash.Show
+    'frmSplash.Show
     'FrmLaporan.Show
-    'FrmUtama.Show
+    FrmUtama.Show
     'FrmMasuk.Show
 End Sub
 

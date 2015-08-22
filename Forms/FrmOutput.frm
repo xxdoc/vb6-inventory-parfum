@@ -42,7 +42,7 @@ Begin VB.Form FrmOutput
             Strikethrough   =   0   'False
          EndProperty
          CustomFormat    =   "dd/MM/yyyy"
-         Format          =   138018819
+         Format          =   160497667
          CurrentDate     =   42091
       End
       Begin VB.TextBox txtResume 

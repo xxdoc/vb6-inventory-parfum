@@ -23,6 +23,7 @@ Designer=Report\ADataKecelakaan.Dsr
 Designer=Report\ADataParfum.Dsr
 Form=Forms\FrmMasuk.frm
 Form=Forms\FrmKategori.frm
+Form=Forms\FrmInputUpdate.frm
 IconForm="FrmParfum"
 Startup="Sub Main"
 HelpFile=""

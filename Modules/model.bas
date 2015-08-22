@@ -1,6 +1,6 @@
 Attribute VB_Name = "model"
 Public Sub set_data_masuk(lv As ListView)
-'On Error Resume Next
+On Error Resume Next
     For i = 1 To lv.ListItems.Count
         lv.ListItems(i).SubItems(3) = Format(lv.ListItems(i).SubItems(3), "dd-mm-yy H:m")
         lv.ListItems(i).SubItems(4) = Format(lv.ListItems(i).SubItems(4), "dd-mm-yy H:m")
@@ -14,7 +14,7 @@ Public Function cek_valid_stok(lv As ListView, tipe As Integer, kode As Integer,
     Dim cStok As Double
     cek_valid_stok = True
     For i = 1 To lv.ListItems.Count
-        If (lv.ListItems(i).SubItems(tipe) = "parfum") Then
+        If (LCase(lv.ListItems(i).SubItems(tipe)) = "parfum") Then
             cStok = get_parfum_stok(lv.ListItems(i).SubItems(kode))
         Else
             cStok = get_botol_stok(lv.ListItems(i).SubItems(kode))

@@ -91,20 +91,6 @@ Begin VB.Form frmSplash
       Top             =   1440
       Width           =   6255
    End
-   Begin VB.Image Image2 
-      Height          =   630
-      Left            =   2160
-      Picture         =   "frmSplash.frx":000C
-      Top             =   360
-      Width           =   4140
-   End
-   Begin VB.Image Image1 
-      Height          =   1140
-      Left            =   240
-      Picture         =   "frmSplash.frx":7C3F
-      Top             =   120
-      Width           =   1635
-   End
 End
 Attribute VB_Name = "frmSplash"
 Attribute VB_GlobalNameSpace = False
@@ -116,7 +102,7 @@ Option Explicit
 Private Sub Form_Load()
     Me.ProgressBar1.Value = 0
     Label3.Caption = "Selamat datang, mohon tunggu...."
-    Label1.Caption = "Inventory Rumah Parfum 4"
+    Label1.Caption = "Inventory Rumah Parfum"
     Label2.Caption = "Version " & App.Major & "." & App.Minor & "." & App.Revision
 End Sub
 
